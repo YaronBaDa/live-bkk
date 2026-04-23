@@ -178,6 +178,7 @@
     overflow:hidden;cursor:pointer;
     transition:transform .35s cubic-bezier(.2,.7,.2,1);
   }
+  .card:focus-visible{outline:3px solid var(--red);outline-offset:-3px}
   .card .bg{
     position:absolute;inset:0;background-size:cover;background-position:center;
     filter:grayscale(1) contrast(1.05) brightness(.78);
@@ -191,14 +192,23 @@
   .card .topline{
     position:relative;z-index:2;padding:12px 12px 0;display:flex;flex-wrap:wrap;
     justify-content:flex-start;align-items:center;gap:6px;
-    font-size:9px;letter-spacing:.08em;text-transform:uppercase;
+    font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
   }
   .card .topline .tag{
-    color:#F7F7F7;opacity:.85;line-height:1;padding:3px 6px;
+    /* High-contrast dark pill that reads against any poster photo. */
+    color:#FFFFFF;line-height:1;padding:5px 9px;border-radius:2px;
+    background:rgba(0,0,0,.72);
+    border:1px solid rgba(255,255,255,.18);
+    backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
     display:inline-flex;align-items:center;
+    text-shadow:0 1px 1px rgba(0,0,0,.45);
   }
-  .card .topline .tag.red{color:#fff;background:var(--red);opacity:1;letter-spacing:.08em}
-  .card .topline .tag.solid{background:rgba(255,255,255,.14);opacity:1;backdrop-filter:blur(2px)}
+  .card .topline .tag.solid{background:rgba(0,0,0,.72)}        /* alias kept for back-compat with existing markup */
+  .card .topline .tag.red{
+    background:var(--red);border-color:var(--red);
+    color:#FFFFFF;letter-spacing:.06em;
+    box-shadow:0 1px 4px rgba(225,38,28,.35);
+  }
   .card .body{
     position:relative;z-index:2;margin-top:auto;padding:0 12px 12px;
   }
@@ -6973,6 +6983,18 @@ const CONCERTS = [
 const app = document.getElementById("app");
 
 function escapeHtml(s){return (s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]))}
+
+/* Wrap one randomly-chosen non-whitespace character in a .red span. */
+function highlightRandom(text){
+  if(!text) return "";
+  const indices = [];
+  for(let i=0; i<text.length; i++){ if(/\S/.test(text[i])) indices.push(i); }
+  if(!indices.length) return escapeHtml(text);
+  const idx = indices[Math.floor(Math.random() * indices.length)];
+  return escapeHtml(text.slice(0, idx))
+       + `<span class="red">${escapeHtml(text[idx])}</span>`
+       + escapeHtml(text.slice(idx + 1));
+}
 function pad(n){return n.toString().padStart(2,"0")}
 
 function bgCss(img, fallback){
@@ -7164,7 +7186,7 @@ function genreLabel(){
   }
   return `${state.genres.length} Genres`;
 }
-function moreLabel(){ return state.recent ? "Recently Added" : "Event Date"; }
+function moreLabel(){ return state.recent ? "Date Added (Newest first)" : "Date of Event (Soonest first)"; }
 
 function renderFilters(){
   // WHEN dropdown
@@ -7218,7 +7240,7 @@ function renderFilters(){
           </div>
         </div>
         <div class="filter-field">
-          <div class="filter-label">Music Style</div>
+          <div class="filter-label">Genres</div>
           <div class="dropdown ${genreHasValue}" data-dd="genre">
             <button type="button" class="dd-button" data-dd-toggle>
               <span class="dd-value">${genreLabel()}</span>${genreBadge}
@@ -7237,8 +7259,8 @@ function renderFilters(){
               <span class="dd-value">${moreLabel()}</span>
             </button>
             <div class="dd-panel" hidden>
-              <button class="dd-opt ${moreDefaultSel}" data-more="default"><span>Event Date</span></button>
-              <button class="dd-opt ${moreRecentSel}" data-more="recent"><span>Recently Added</span></button>
+              <button class="dd-opt ${moreDefaultSel}" data-more="default"><span>Date of Event (Soonest first)</span></button>
+              <button class="dd-opt ${moreRecentSel}" data-more="recent"><span>Date Added (Newest first)</span></button>
             </div>
           </div>
         </div>
@@ -7261,7 +7283,7 @@ function renderListPage(opts){
   const clearLink = hasFilters ? `<a class="clear" data-clear>Clear filters</a>` : "";
   app.innerHTML = `
     <section class="page-head">
-      <h1>${opts.heading}<span class="red">.</span></h1>
+      <h1>${highlightRandom(opts.heading + ".")}</h1>
       <div class="meta">
         <b>${allUpcoming} upcoming</b>
         ${allPast} archived<br>
@@ -7420,12 +7442,15 @@ function concertCard(c){
   }
   // Date + time chip
   const dateLabel = c.time ? `${c.date} · ${c.time}` : c.date;
+  // Compose a richer aria-label so screen readers get title + date + venue + price.
+  const labelParts = [c.title, dateLabel, venueName, c.price].filter(Boolean);
+  const ariaLabel = escapeHtml(labelParts.join(", "));
   return `
-    <a class="card" href="#/concert/${c.id}" aria-label="${escapeHtml(c.title)}">
-      <div class="bg" style="${bgCss(c.image, c.fallback)}"></div>
-      <div class="shade"></div>
+    <a class="card" href="#/concert/${c.id}" aria-label="${ariaLabel}">
+      <div class="bg" style="${bgCss(c.image, c.fallback)}" aria-hidden="true"></div>
+      <div class="shade" aria-hidden="true"></div>
       <div class="topline">
-        <span class="tag solid">${escapeHtml(dateLabel)}</span>
+        <span class="tag" aria-label="Date">${escapeHtml(dateLabel)}</span>
         ${genreChip}
         ${c.tag ? `<span class="tag ${c.status==="past"?"":"red"}">${escapeHtml(c.tag)}</span>` : ""}
       </div>
@@ -7468,7 +7493,7 @@ function renderVenues(){
 
   app.innerHTML = `
     <section class="page-head">
-      <h1>Venues<span class="red">.</span></h1>
+      <h1>${highlightRandom("Venues.")}</h1>
       <div class="meta">
         <b>${venues.length} rooms</b>
         Bangkok metro<br>
@@ -7519,7 +7544,7 @@ function renderArtists(){
 
   app.innerHTML = `
     <section class="page-head">
-      <h1>Artists<span class="red">.</span></h1>
+      <h1>${highlightRandom("Artists.")}</h1>
       <div class="meta">
         <b>${artists.length} artists tracked</b>
         Linked to verified shows<br>
@@ -7593,7 +7618,7 @@ function renderVenueDetail(id){
         <div class="bg" style="${bgCss(v.image)}"></div>
         <div class="shade"></div>
         <div class="hero-content">
-          <h1>${escapeHtml(v.name)}<span class="red">.</span></h1>
+          <h1>${highlightRandom(v.name + ".")}</h1>
           <div class="tag-row">
             <span>${escapeHtml(v.type)}</span>
             <span>${escapeHtml(v.city)}</span>
@@ -7643,7 +7668,7 @@ function renderArtistDetail(id){
         <div class="bg" style="${bgCss(a.image, a.fallback)}"></div>
         <div class="shade"></div>
         <div class="hero-content">
-          <h1>${escapeHtml(a.name)}<span class="red">.</span></h1>
+          <h1>${highlightRandom(a.name + ".")}</h1>
           <div class="tag-row">
             <span>${escapeHtml(a.role)}</span>
             <span>${escapeHtml(a.country)}</span>
