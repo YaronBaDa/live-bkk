@@ -9,15 +9,22 @@ The whole site is one self-contained `index.html` — no build step, no external
 - `index.html` — the entire site: HTML, CSS, JS, and the embedded `CONCERTS`, `VENUES`, and `ARTISTS` arrays.
 - `.github/workflows/pages.yml` — GitHub Actions workflow that publishes the site to GitHub Pages on every push to `main`.
 
-## How the listings get refreshed
+## Refreshing listings
 
-Listings are refreshed by a Cowork scheduled task (`livebkk-scrape`, defined in `SKILL.md` outside this repo) that runs three times a day. Each run:
+The scraper + merger pipeline lives in the Cowork outputs folder (not in this repo). To run it manually:
 
-1. Reads the existing `CONCERTS = [ ... ];` array out of `index.html`.
-2. Pulls events from a tiered set of sources (Ticketmelon, Eventpop, Megatix, venue pages, promoter pages, editorial sites).
-3. Merges new events in, updates mutable fields on existing ones, flips past events to `status: "past"`, and caps the array at 200.
-4. Writes the file back, preserving CSS / VENUES / ARTISTS / filter JS.
-5. Commits the change locally. **Push is manual** — run `git push` to publish.
+```bash
+python3 update.py            # scrape every source in parallel + merge into index.html
+python3 update.py --dry-run  # scrape + merge but don't overwrite the file
+python3 update.py --no-fetch # skip scrapers, just re-merge cached *_events.json
+```
+
+Each run:
+
+1. Pulls events from Ticketmelon (`api-frontend.ticketmelon.com/v1/buyer/home-page/events`), Thai Ticket Major (HTML listing), and Live Nation Tero (homepage + per-event og: meta).
+2. Merges into `CONCERTS` — preserving `added` dates and curated entries, flipping past events to `status: "past"`, deduping by `id` and by normalised title+date across sources.
+3. Writes the file back, touching nothing outside the `CONCERTS` array.
+4. Commits locally. **Push is manual** — run `git push` (or use GitHub Desktop) to publish.
 
 ## Hosting on GitHub Pages
 

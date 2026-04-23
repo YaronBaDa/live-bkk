@@ -190,12 +190,15 @@
   }
   .card .topline{
     position:relative;z-index:2;padding:12px 12px 0;display:flex;flex-wrap:wrap;
-    justify-content:flex-start;gap:6px;
+    justify-content:flex-start;align-items:center;gap:6px;
     font-size:9px;letter-spacing:.08em;text-transform:uppercase;
   }
-  .card .topline .tag{color:#F7F7F7;opacity:.85;line-height:1.2}
-  .card .topline .tag.red{color:#fff;background:var(--red);padding:3px 6px;opacity:1;letter-spacing:.08em}
-  .card .topline .tag.solid{background:rgba(255,255,255,.14);padding:3px 6px;opacity:1;backdrop-filter:blur(2px)}
+  .card .topline .tag{
+    color:#F7F7F7;opacity:.85;line-height:1;padding:3px 6px;
+    display:inline-flex;align-items:center;
+  }
+  .card .topline .tag.red{color:#fff;background:var(--red);opacity:1;letter-spacing:.08em}
+  .card .topline .tag.solid{background:rgba(255,255,255,.14);opacity:1;backdrop-filter:blur(2px)}
   .card .body{
     position:relative;z-index:2;margin-top:auto;padding:0 12px 12px;
   }
@@ -598,7 +601,7 @@ const CONCERTS = [
     id:"tm-recital2026",
     title:"PGVIM Recital Series 2026",
     date:"Thu 23 Apr 2026",
-    time:"12:00",
+    time:"15:00",
     dateSort:"2026-04-23",
     added:"2026-04-23",
     tags:["other"],
@@ -2516,6 +2519,31 @@ const CONCERTS = [
     linkLabel:"Tickets on Ticketmelon"
   },
   {
+    id:"tm-metaraph",
+    title:"HORNGY",
+    date:"Sat 02 May 2026",
+    time:"23:00",
+    dateSort:"2026-05-02",
+    added:"2026-04-23",
+    tags:["electronic"],
+    venueId:"",
+    venueName:"CLUB BACK DOOR (CBD)",
+    artistText:"HORNGY",
+    artists:[],
+    genre:"Nightlife · Electronic",
+    status:"upcoming",
+    price:"From 800 THB",
+    minPrice:800,
+    currency:"THB",
+    tag:"",
+    image:"https://tm-prod-event-files-v3.s3.ap-southeast-1.amazonaws.com/bc7c6dfd3e6511f1967801117567899b/poster/330d02813e6711f1922201117567899b.png",
+    fallback:"https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=1600&q=80",
+    blurb:"Horngy — live in Bangkok via Ticketmelon.",
+    long:"Horngy — live in Bangkok via Ticketmelon.",
+    link:"https://www.ticketmelon.com/event/metaraph",
+    linkLabel:"Tickets on Ticketmelon"
+  },
+  {
     id:"ttm-america-250-afternoon-tea-music-dance-by-auaa",
     title:"America 250 : Afternoon Tea Music & Dance By AUAA",
     date:"Sun 03 May 2026",
@@ -2638,6 +2666,31 @@ const CONCERTS = [
     blurb:"Lesbian Arm Wrestling — live in Bangkok via Ticketmelon.",
     long:"Lesbian Arm Wrestling — live in Bangkok via Ticketmelon.",
     link:"https://www.ticketmelon.com/event/Lesbian-Arm-Wrestling",
+    linkLabel:"Tickets on Ticketmelon"
+  },
+  {
+    id:"tm-tribe-esme",
+    title:"TRIBE at Esmé Beach Club",
+    date:"Sun 03 May 2026",
+    time:"14:00",
+    dateSort:"2026-05-03",
+    added:"2026-04-23",
+    tags:["other"],
+    venueId:"",
+    venueName:"Esmé Beach Club",
+    artistText:"TRIBE at Esmé Beach Club",
+    artists:[],
+    genre:"Live",
+    status:"upcoming",
+    price:"From 500 THB",
+    minPrice:500,
+    currency:"THB",
+    tag:"",
+    image:"https://tm-prod-event-files-v3.s3.ap-southeast-1.amazonaws.com/68798ed23e4811f1967801117567899b/poster/ab022cf83e4911f1967801117567899b.png",
+    fallback:"https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=1600&q=80",
+    blurb:"TRIBE at Esmé Beach Club — live in Bangkok via Ticketmelon.",
+    long:"TRIBE at Esmé Beach Club — live in Bangkok via Ticketmelon.",
+    link:"https://www.ticketmelon.com/event/tribe-esme",
     linkLabel:"Tickets on Ticketmelon"
   },
   {
@@ -4881,6 +4934,31 @@ const CONCERTS = [
     linkLabel:"Tickets on Ticketmelon"
   },
   {
+    id:"tm-love6vt",
+    title:"LOVE6",
+    date:"Sat 30 May 2026",
+    time:"18:00",
+    dateSort:"2026-05-30",
+    added:"2026-04-23",
+    tags:["other"],
+    venueId:"",
+    venueName:"140 Wireless Building",
+    artistText:"LOVE6",
+    artists:[],
+    genre:"Live",
+    status:"upcoming",
+    price:"From 760 THB",
+    minPrice:760,
+    currency:"THB",
+    tag:"",
+    image:"https://tm-prod-event-files-v3.s3.ap-southeast-1.amazonaws.com/7a66f3773e3c11f1990801117567899b/poster/9684ade93e4211f1922201117567899b.png",
+    fallback:"https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=1600&q=80",
+    blurb:"Love6 — live in Bangkok via Ticketmelon.",
+    long:"Love6 — live in Bangkok via Ticketmelon.",
+    link:"https://www.ticketmelon.com/event/love6vt",
+    linkLabel:"Tickets on Ticketmelon"
+  },
+  {
     id:"ttm-laufey-a-matter-of-time-tour",
     title:"Laufey: A Matter of Time Tour in Bangkok",
     date:"Sun 31 May 2026",
@@ -6083,6 +6161,56 @@ const CONCERTS = [
     linkLabel:"Tickets on Ticketmelon"
   },
   {
+    id:"tm-doggylandbkk2026",
+    title:"Doggyland Live! In Bangkok 2026",
+    date:"Sat 18 Jul 2026",
+    time:"15:00",
+    dateSort:"2026-07-18",
+    added:"2026-04-23",
+    tags:["other"],
+    venueId:"",
+    venueName:"ICONSIAM HALL",
+    artistText:"Doggyland Live!",
+    artists:[],
+    genre:"Arts · Performance",
+    status:"upcoming",
+    price:"On sale",
+    minPrice:null,
+    currency:"THB",
+    tag:"",
+    image:"https://tm-prod-event-files-v3.s3.ap-southeast-1.amazonaws.com/d3380fac164d11f1990801117567899b/poster/0fb33faf3b4411f1967801117567899b.png",
+    fallback:"https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=1600&q=80",
+    blurb:"Doggyland Live! In Bangkok 2026 — live in Bangkok via Ticketmelon.",
+    long:"Doggyland Live! In Bangkok 2026 — live in Bangkok via Ticketmelon.",
+    link:"https://www.ticketmelon.com/event/doggylandbkk2026",
+    linkLabel:"Tickets on Ticketmelon"
+  },
+  {
+    id:"ttm-centimillimental-world-tour-2025-2026-cafune",
+    title:"Centimillimental WORLD TOUR 2025-2026 ''Cafuné''",
+    date:"Sun 19 Jul 2026",
+    time:"",
+    dateSort:"2026-07-19",
+    added:"2026-04-23",
+    tags:["other"],
+    venueId:"",
+    venueName:"เซ็นทรัลเวิลด์ ไลฟ์, ชั้น 8 เซ็นทรัลเวิลด์",
+    artistText:"",
+    artists:[],
+    genre:"Live",
+    status:"upcoming",
+    price:"On sale",
+    minPrice:null,
+    currency:"THB",
+    tag:"",
+    image:"https://www.thaiticketmajor.com/img_poster/prefix_1/0680/6680/centimillimental-world-tour-2025-2026-cafune-69d616842fde1-l.png",
+    fallback:"https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=1600&q=80",
+    blurb:"Centimillimental WORLD TOUR 2025-2026 ''Cafuné'' — live in Bangkok via Thai Ticket Major.",
+    long:"Centimillimental WORLD TOUR 2025-2026 ''Cafuné'' — live in Bangkok via Thai Ticket Major.",
+    link:"https://www.thaiticketmajor.com/concert/centimillimental-world-tour-2025-2026-cafune.html",
+    linkLabel:"Tickets on Thai Ticket Major"
+  },
+  {
     id:"tm-honne10yearanniversary-firstnight",
     title:"HONNE 10 YEAR ANNIVERSARY TOUR - The First Night",
     date:"Sat 25 Jul 2026",
@@ -7119,38 +7247,44 @@ function renderFilters(){
   `;
 }
 
-function renderConcerts(){
-  setActive("concerts");
-  // Concerts tab excludes festivals.
-  const pool = CONCERTS.filter(c => !isFestival(c));
+/* Shared list page (Concerts and Festivals share the same shell). */
+function renderListPage(opts){
+  setActive(opts.view);
+  const pool = CONCERTS.filter(opts.predicate);
   const allUpcoming = pool.filter(c=>c.status!=="past").length;
   const allPast = pool.filter(c=>c.status==="past").length;
-
   const filtered = applyFilters(pool);
   const hasFilters = state.when!=="any" || state.whenMonth || state.genres.length>0 || state.recent || state.q;
-
   const cards = filtered.length
     ? filtered.map(concertCard).join("")
-    : `<div class="empty-state" style="grid-column:1/-1">No shows match.<span class="small">Try widening the date range or clearing a filter.</span></div>`;
-
+    : `<div class="empty-state" style="grid-column:1/-1">${opts.emptyTitle}<span class="small">Try widening the date range or clearing a filter.</span></div>`;
   const clearLink = hasFilters ? `<a class="clear" data-clear>Clear filters</a>` : "";
-
   app.innerHTML = `
     <section class="page-head">
-      <h1>Concerts<span class="red">.</span></h1>
+      <h1>${opts.heading}<span class="red">.</span></h1>
       <div class="meta">
         <b>${allUpcoming} upcoming</b>
         ${allPast} archived<br>
-        Sourced · Ticketmelon · Thai Ticket Major
+        ${opts.metaLine}
       </div>
     </section>
     ${renderFilters()}
     <div class="results-meta">${filtered.length} result${filtered.length===1?"":"s"}${clearLink}</div>
     <div class="grid concerts">${cards}</div>
   `;
-
-  wireFilterRow(renderConcerts);
+  wireFilterRow(opts.rerender);
   window.scrollTo({top:0,behavior:"instant"});
+}
+
+function renderConcerts(){
+  renderListPage({
+    view: "concerts",
+    heading: "Concerts",
+    metaLine: "Sourced · Ticketmelon · Thai Ticket Major",
+    emptyTitle: "No shows match.",
+    predicate: c => !isFestival(c),
+    rerender: renderConcerts,
+  });
 }
 
 /* Wire up the filter dropdowns + search box. Used by both renderConcerts
@@ -7251,40 +7385,14 @@ function wireFilterRow(rerender){
 }
 
 function renderFestivals(){
-  setActive("festivals");
-  // Festivals tab: only entries that look like a festival.
-  const pool = CONCERTS.filter(isFestival);
-  const allUpcoming = pool.filter(c=>c.status!=="past").length;
-  const allPast = pool.filter(c=>c.status==="past").length;
-
-  const filtered = applyFilters(pool);
-  const hasFilters = state.when!=="any" || state.whenMonth || state.genres.length>0 || state.recent || state.q;
-
-  const cards = filtered.length
-    ? filtered.map(concertCard).join("")
-    : `<div class="empty-state" style="grid-column:1/-1">No festivals match.<span class="small">Try widening the date range or clearing a filter.</span></div>`;
-
-  const clearLink = hasFilters ? `<a class="clear" data-clear>Clear filters</a>` : "";
-
-  app.innerHTML = `
-    <section class="page-head">
-      <h1>Festivals<span class="red">.</span></h1>
-      <div class="meta">
-        <b>${allUpcoming} upcoming</b>
-        ${allPast} archived<br>
-        Multi-day · Multi-stage
-      </div>
-    </section>
-    ${renderFilters()}
-    <div class="results-meta">${filtered.length} result${filtered.length===1?"":"s"}${clearLink}</div>
-    <div class="grid concerts">${cards}</div>
-  `;
-
-  // Wire up the same dropdown + filter handlers that renderConcerts uses.
-  // Easiest: re-call the wiring code path by simulating renderConcerts's tail.
-  // We replicate the wiring inline since both pages share the filter row.
-  wireFilterRow(renderFestivals);
-  window.scrollTo({top:0,behavior:"instant"});
+  renderListPage({
+    view: "festivals",
+    heading: "Festivals",
+    metaLine: "Multi-day · Multi-stage",
+    emptyTitle: "No festivals match.",
+    predicate: isFestival,
+    rerender: renderFestivals,
+  });
 }
 
 function genreLabelFor(tagId){
