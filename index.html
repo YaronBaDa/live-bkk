@@ -31,6 +31,25 @@
   .tight{font-family:'Inter Tight',sans-serif;font-weight:900;letter-spacing:-0.035em;text-transform:uppercase;line-height:.95}
   .red{color:var(--red)}
 
+  /* ========== A11Y UTILITIES ========== */
+  .skip-link{
+    position:absolute;left:-9999px;top:0;z-index:1000;
+    padding:10px 16px;background:var(--ink);color:var(--paper);
+    font-family:'Inter',sans-serif;font-weight:600;font-size:12px;
+    letter-spacing:.08em;text-transform:uppercase;
+  }
+  .skip-link:focus{left:8px;top:8px;outline:3px solid var(--red);outline-offset:2px}
+  .sr-only{
+    position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+    overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{
+      animation-duration:0.01ms!important;animation-iteration-count:1!important;
+      transition-duration:0.01ms!important;scroll-behavior:auto!important;
+    }
+  }
+
   /* ========== TOPBAR ========== */
   header.bar{
     position:sticky;top:0;z-index:20;background:var(--paper);
@@ -337,6 +356,8 @@
 </style>
 </head>
 <body>
+
+<a class="skip-link" href="#app">Skip to main content</a>
 
 <header class="bar">
   <a class="logo" href="#/">Live / BKK</a>
@@ -6984,28 +7005,30 @@ const app = document.getElementById("app");
 
 function escapeHtml(s){return (s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]))}
 
-/* Wrap one randomly-chosen non-whitespace character in a .red span. */
-function highlightRandom(text){
-  if(!text) return "";
-  const indices = [];
-  for(let i=0; i<text.length; i++){ if(/\S/.test(text[i])) indices.push(i); }
-  if(!indices.length) return escapeHtml(text);
-  const idx = indices[Math.floor(Math.random() * indices.length)];
-  return escapeHtml(text.slice(0, idx))
-       + `<span class="red">${escapeHtml(text[idx])}</span>`
-       + escapeHtml(text.slice(idx + 1));
-}
-function pad(n){return n.toString().padStart(2,"0")}
-
 function bgCss(img, fallback){
   const urls = [img, fallback].filter(Boolean).map(u=>`url('${u}')`).join(",");
   return `background-image:${urls}`;
 }
 
+/* Per-route titles used for both nav-active marking and document.title. */
+const VIEW_TITLES = {
+  concerts: "Concerts",
+  festivals: "Festivals",
+  venues: "Venues",
+  artists: "Artists",
+};
+
 function setActive(view){
   document.querySelectorAll("nav.menu a").forEach(a=>{
-    a.classList.toggle("active", a.dataset.view===view);
+    const isActive = a.dataset.view===view;
+    a.classList.toggle("active", isActive);
+    if(isActive) a.setAttribute("aria-current", "page");
+    else a.removeAttribute("aria-current");
   });
+  // Keep document.title in sync with the route — important for screen readers
+  // (which announce title on page change) and the browser tab.
+  const label = VIEW_TITLES[view];
+  if(label) document.title = `${label} — Live / BKK`;
 }
 
 /* A concert counts as a festival if it has the explicit `festival` status
@@ -7228,7 +7251,7 @@ function renderFilters(){
         <div class="filter-field">
           <div class="filter-label">When</div>
           <div class="dropdown ${whenHasValue}" data-dd="when">
-            <button type="button" class="dd-button" data-dd-toggle>
+            <button type="button" class="dd-button" data-dd-toggle aria-haspopup="listbox" aria-expanded="false">
               <span class="dd-value">${whenLabel()}</span>
             </button>
             <div class="dd-panel" hidden>
@@ -7242,7 +7265,7 @@ function renderFilters(){
         <div class="filter-field">
           <div class="filter-label">Genres</div>
           <div class="dropdown ${genreHasValue}" data-dd="genre">
-            <button type="button" class="dd-button" data-dd-toggle>
+            <button type="button" class="dd-button" data-dd-toggle aria-haspopup="listbox" aria-expanded="false">
               <span class="dd-value">${genreLabel()}</span>${genreBadge}
             </button>
             <div class="dd-panel" hidden>
@@ -7255,7 +7278,7 @@ function renderFilters(){
         <div class="filter-field">
           <div class="filter-label">Sort</div>
           <div class="dropdown ${moreHasValue}" data-dd="more">
-            <button type="button" class="dd-button" data-dd-toggle>
+            <button type="button" class="dd-button" data-dd-toggle aria-haspopup="listbox" aria-expanded="false">
               <span class="dd-value">${moreLabel()}</span>
             </button>
             <div class="dd-panel" hidden>
@@ -7283,7 +7306,7 @@ function renderListPage(opts){
   const clearLink = hasFilters ? `<a class="clear" data-clear>Clear filters</a>` : "";
   app.innerHTML = `
     <section class="page-head">
-      <h1>${highlightRandom(opts.heading + ".")}</h1>
+      <h1>${opts.heading}<span class="red">.</span></h1>
       <div class="meta">
         <b>${allUpcoming} upcoming</b>
         ${allPast} archived<br>
@@ -7312,14 +7335,17 @@ function renderConcerts(){
 /* Wire up the filter dropdowns + search box. Used by both renderConcerts
    and renderFestivals — the rerender callback decides which page repaints. */
 function wireFilterRow(rerender){
+  const setExpanded = (d, expanded)=>{
+    const btn = d.querySelector("[data-dd-toggle]");
+    if(btn) btn.setAttribute("aria-expanded", String(!!expanded));
+  };
   const openDropdown = (name)=>{
     app.querySelectorAll(".dropdown").forEach(d=>{
       const panel = d.querySelector(".dd-panel");
-      if(d.dataset.dd===name){
-        d.classList.add("open"); if(panel) panel.hidden = false;
-      } else {
-        d.classList.remove("open"); if(panel) panel.hidden = true;
-      }
+      const isThis = d.dataset.dd===name;
+      d.classList.toggle("open", isThis);
+      if(panel) panel.hidden = !isThis;
+      setExpanded(d, isThis);
     });
   };
   const closeAll = ()=>{
@@ -7327,6 +7353,7 @@ function wireFilterRow(rerender){
       d.classList.remove("open");
       const panel = d.querySelector(".dd-panel");
       if(panel) panel.hidden = true;
+      setExpanded(d, false);
     });
   };
   app.querySelectorAll(".dropdown").forEach(dd=>{
@@ -7346,7 +7373,21 @@ function wireFilterRow(rerender){
         d.classList.remove("open");
         const panel = d.querySelector(".dd-panel");
         if(panel) panel.hidden = true;
+        const btn = d.querySelector("[data-dd-toggle]");
+        if(btn) btn.setAttribute("aria-expanded", "false");
       });
+    });
+    // ESC closes any open dropdown — basic keyboard hygiene
+    document.addEventListener("keydown",(e)=>{
+      if(e.key === "Escape"){
+        document.querySelectorAll(".dropdown.open").forEach(d=>{
+          d.classList.remove("open");
+          const panel = d.querySelector(".dd-panel");
+          if(panel) panel.hidden = true;
+          const btn = d.querySelector("[data-dd-toggle]");
+          if(btn){ btn.setAttribute("aria-expanded","false"); btn.focus(); }
+        });
+      }
     });
   }
 
@@ -7493,7 +7534,7 @@ function renderVenues(){
 
   app.innerHTML = `
     <section class="page-head">
-      <h1>${highlightRandom("Venues.")}</h1>
+      <h1>Venues<span class="red">.</span></h1>
       <div class="meta">
         <b>${venues.length} rooms</b>
         Bangkok metro<br>
@@ -7544,7 +7585,7 @@ function renderArtists(){
 
   app.innerHTML = `
     <section class="page-head">
-      <h1>${highlightRandom("Artists.")}</h1>
+      <h1>Artists<span class="red">.</span></h1>
       <div class="meta">
         <b>${artists.length} artists tracked</b>
         Linked to verified shows<br>
@@ -7560,6 +7601,7 @@ function renderConcertDetail(id){
   setActive("concerts");
   const c = CONCERTS.find(x=>x.id===id);
   if(!c){ location.hash="#/"; return; }
+  document.title = `${c.title} — Live / BKK`;
   const venue = c.venueId ? VENUES[c.venueId] : null;
   const venueName = venue?.name || c.venueName || "Venue TBA";
   const relatedArtists = (c.artists||[]).map(aid=>ARTISTS[aid]).filter(Boolean);
@@ -7606,6 +7648,7 @@ function renderVenueDetail(id){
   setActive("venues");
   const v = VENUES[id];
   if(!v){ location.hash="#/venues"; return; }
+  document.title = `${v.name} — Live / BKK`;
   const upcoming = CONCERTS.filter(c=>c.venueId===v.id && c.status==="upcoming")
     .sort((a,b)=>a.dateSort.localeCompare(b.dateSort));
   const past = CONCERTS.filter(c=>c.venueId===v.id && c.status==="past")
@@ -7618,7 +7661,7 @@ function renderVenueDetail(id){
         <div class="bg" style="${bgCss(v.image)}"></div>
         <div class="shade"></div>
         <div class="hero-content">
-          <h1>${highlightRandom(v.name + ".")}</h1>
+          <h1>${escapeHtml(v.name)}<span class="red">.</span></h1>
           <div class="tag-row">
             <span>${escapeHtml(v.type)}</span>
             <span>${escapeHtml(v.city)}</span>
@@ -7658,6 +7701,7 @@ function renderArtistDetail(id){
   setActive("artists");
   const a = ARTISTS[id];
   if(!a){ location.hash="#/artists"; return; }
+  document.title = `${a.name} — Live / BKK`;
   const shows = CONCERTS.filter(c=>c.artists.includes(a.id))
     .sort((x,y)=>y.dateSort.localeCompare(x.dateSort));
 
@@ -7668,7 +7712,7 @@ function renderArtistDetail(id){
         <div class="bg" style="${bgCss(a.image, a.fallback)}"></div>
         <div class="shade"></div>
         <div class="hero-content">
-          <h1>${highlightRandom(a.name + ".")}</h1>
+          <h1>${escapeHtml(a.name)}<span class="red">.</span></h1>
           <div class="tag-row">
             <span>${escapeHtml(a.role)}</span>
             <span>${escapeHtml(a.country)}</span>
