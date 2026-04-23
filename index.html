@@ -131,6 +131,19 @@
     padding:10px 16px 4px;border-top:1px dashed rgba(10,10,10,.2);margin-top:4px;
   }
   .dd-group:first-child{border-top:0;margin-top:0}
+  .filter-search{
+    flex:1 1 260px;min-width:240px;
+  }
+  .filter-search input{
+    width:100%;padding:10px 14px;border:1px solid var(--ink);background:var(--paper);
+    color:var(--ink);font-family:'Inter',sans-serif;font-weight:500;font-size:11px;
+    letter-spacing:.06em;text-transform:uppercase;line-height:1;outline:none;
+    transition:border-color .15s ease,background .15s ease;
+  }
+  .filter-search input:focus{border-color:var(--red)}
+  .filter-search input::placeholder{opacity:.45;text-transform:uppercase;letter-spacing:.08em}
+  .filter-search.has-value input{background:var(--ink);color:var(--paper)}
+  .filter-search.has-value input::placeholder{color:rgba(255,255,255,.45)}
   .results-meta{
     padding:18px var(--edge) 0;font-size:11px;letter-spacing:.08em;text-transform:uppercase;
     opacity:.55;
@@ -5891,7 +5904,60 @@ const MONTHS_2026 = [
   ["2026-07","July"],["2026-08","August"],["2026-09","September"],
   ["2026-10","October"],["2026-11","November"],["2026-12","December"]
 ];
-const state = { when:"any", whenMonth:"", genres:[], recent:false };
+const state = { when:"any", whenMonth:"", genres:[], recent:false, q:"" };
+
+/* ---------- ARTIST → GENRE OVERRIDES (re-tagged at boot) ----------
+   Title-keyword regex in scrapers can't catch every artist (e.g. "J.I.D –
+   God Does Like World Tours" never says "rap"). This lookup patches tags
+   for known artists at page-load time. Match is case-insensitive substring
+   against the concert title. Existing curated tags are preserved unless
+   they were left as a generic fallback (["other"]). */
+const ARTIST_TAG_OVERRIDES = [
+  // Hip-hop / rap
+  { match: /\bj\.?i\.?d\b/i,                 tags:["hiphop","rnb"],          genre:"Hip-Hop" },
+  { match: /\btyler[, ]+the[, ]+creator\b/i, tags:["hiphop","rnb"],          genre:"Hip-Hop" },
+  { match: /\b(kendrick lamar|drake|travis scott|future|playboi carti|lil [a-z]+|young thug|21 savage|metro boomin|gunna|denzel curry|joey bada|earl sweatshirt|asap|a\$ap|action bronson|run the jewels|danny brown|ice cube|nas|jay[- ]z|eminem|snoop|dr\. dre)\b/i,
+    tags:["hiphop"],                                                          genre:"Hip-Hop" },
+  { match: /\b(thaitanium|youngohm|f\.hero|illslick|10milli|urboytj|milli|liltan|paothai|gavin\.d|nylas|kacha|raptor|fukking hero)\b/i,
+    tags:["hiphop"],                                                          genre:"Thai Hip-Hop" },
+  { match: /\b(bbno|bbno\$|jaden|smino)\b/i,  tags:["hiphop","rnb"],         genre:"Hip-Hop" },
+  // R&B / soul
+  { match: /\b(daniel caesar|sza|frank ocean|brent faiyaz|giveon|h\.e\.r|summer walker|jhene aiko|kehlani|jenevieve|the kid laroi)\b/i,
+    tags:["rnb","pop"],                                                       genre:"R&B" },
+  // Electronic / DJ / nightlife
+  { match: /\b(dj |b2b|techno|house music|deep house|trance|drum.?n.?bass|dnb|bass music|edm|rave|warehouse|peggy gou|four tet|fred again|bicep|bonobo|tycho|bedouin|seth troxler|jamie xx|caribou|nina kraviz)\b/i,
+    tags:["electronic"],                                                      genre:"Electronic" },
+  // Metal / hardcore
+  { match: /\b(metal|hardcore|deathcore|metalcore|grindcore|djent|black metal|death metal|defying decay|rats records|brand of sacrifice|spiritbox|architects|knocked loose|dexcore|kollaps|shadow of intent|metalverse)\b/i,
+    tags:["metal","alternative"],                                             genre:"Metal" },
+  // Indie / alternative
+  { match: /\b(indie club|loudly murmuring|have you heard|blueprint livehouse|melt livehouse|speakerbox|de commune|mr\.?fox|bangkok island|horn presents|live ?house)\b/i,
+    tags:["indie","alternative"],                                             genre:"Indie · Alternative" },
+  // Pop (catch broad pop tours that fall through)
+  { match: /\b(world tour|pop tour|fan ?meeting|fan ?con|fanfest|fanclub|comeback|showcase tour)\b/i,
+    tags:["pop"],                                                             genre:"Pop · Tour" },
+  // Jazz / classical
+  { match: /\b(jazz|big band|orchestra|philharmonic|symphony|recital|chamber|choir|opera|ballet)\b/i,
+    tags:["jazz"],                                                            genre:"Jazz · Classical" },
+];
+
+function enrichConcertTags(){
+  CONCERTS.forEach(c => {
+    // Only patch entries whose tags look auto-generated/generic.
+    const isGeneric = !c.tags || c.tags.length === 0 ||
+                      (c.tags.length === 1 && c.tags[0] === "other");
+    if (!isGeneric) return;
+    const hay = (c.title || "") + " " + (c.venueName || "") + " " +
+                (c.venueId ? (VENUES[c.venueId]?.name || "") : "");
+    for (const rule of ARTIST_TAG_OVERRIDES){
+      if (rule.match.test(hay)){
+        c.tags = rule.tags.slice();
+        if (c.genre === "Live" || !c.genre) c.genre = rule.genre;
+        return;
+      }
+    }
+  });
+}
 
 function today(){ return new Date(); }
 function iso(d){ return d.toISOString().slice(0,10); }
@@ -5932,10 +5998,26 @@ function genreMatches(c, genres){
   const tags = c.tags || [];
   return genres.some(g => tags.includes(g));
 }
+function searchMatches(c, q){
+  if(!q) return true;
+  const needle = q.trim().toLowerCase();
+  if(!needle) return true;
+  const venue = c.venueId ? (VENUES[c.venueId]?.name || "") : (c.venueName || "");
+  // Resolve artist ids to names (and aliases) so a search for "JID" matches
+  // both the title and the artist record.
+  const artistText = (c.artists||[]).map(id => {
+    const a = ARTISTS[id]; if(!a) return id;
+    return [a.name, ...(a.aliases||[])].join(" ");
+  }).join(" ");
+  const hay = `${c.title||""} ${venue} ${artistText} ${c.genre||""}`.toLowerCase();
+  return hay.includes(needle);
+}
+
 function applyFilters(list){
   let out = list.slice();
   out = out.filter(c=>dateMatches(c, state.when, state.whenMonth));
   out = out.filter(c=>genreMatches(c, state.genres));
+  out = out.filter(c=>searchMatches(c, state.q));
   if(state.recent){
     const cutoff = addDays(startOfDay(today()), -21);
     out = out.filter(c=>c.added && new Date(c.added+"T00:00:00") >= cutoff);
@@ -6001,9 +6083,16 @@ function renderFilters(){
   const moreRecentSel = state.recent ? "selected":"";
   const moreHasValue = state.recent ? "has-value":"";
 
+  const qHasValue = state.q ? "has-value" : "";
+  const qVal = (state.q || "").replace(/"/g,"&quot;");
+
   return `
     <section class="filters">
       <div class="filter-row">
+        <div class="filter-field filter-search ${qHasValue}">
+          <div class="filter-label">Search</div>
+          <input type="search" data-search placeholder="Artist, venue, festival…" value="${qVal}" autocomplete="off"/>
+        </div>
         <div class="filter-field">
           <div class="filter-label">When</div>
           <div class="dropdown ${whenHasValue}" data-dd="when">
@@ -6166,24 +6255,53 @@ function renderConcerts(){
     renderConcerts();
   }));
 
+  // SEARCH input — debounced re-render so we keep focus + cursor position.
+  const searchInput = app.querySelector("[data-search]");
+  if(searchInput){
+    searchInput.addEventListener("click", e=>e.stopPropagation());
+    let t = null;
+    searchInput.addEventListener("input", (e)=>{
+      const v = e.target.value;
+      clearTimeout(t);
+      t = setTimeout(()=>{
+        state.q = v;
+        const cur = e.target.selectionStart;
+        renderConcerts();
+        // Restore focus + cursor after re-render
+        const again = app.querySelector("[data-search]");
+        if(again){ again.focus(); try { again.setSelectionRange(cur, cur); } catch(_){} }
+      }, 120);
+    });
+  }
+
   // Clear filters
   const clearBtn = app.querySelector("[data-clear]");
   if(clearBtn) clearBtn.addEventListener("click",()=>{
-    state.when="any"; state.whenMonth=""; state.genres=[]; state.recent=false;
+    state.when="any"; state.whenMonth=""; state.genres=[]; state.recent=false; state.q="";
     renderConcerts();
   });
 
   window.scrollTo({top:0,behavior:"instant"});
 }
 
+function genreLabelFor(tagId){
+  const g = GENRES.find(x => x.id === tagId);
+  return g ? g.label : tagId;
+}
+
 function concertCard(c){
   const venueName = c.venueId ? VENUES[c.venueId]?.name : c.venueName;
+  const primaryTag = (c.tags && c.tags[0]) || null;
+  const genreChip = primaryTag
+    ? `<span class="tag">${escapeHtml(genreLabelFor(primaryTag))}</span>`
+    : "";
   return `
     <a class="card" href="#/concert/${c.id}" aria-label="${escapeHtml(c.title)}">
       <div class="bg" style="${bgCss(c.image, c.fallback)}"></div>
       <div class="shade"></div>
       <div class="topline">
         <span class="tag">${escapeHtml(c.date)}</span>
+        ${genreChip}
         ${c.tag ? `<span class="tag ${c.status==="past"?"":"red"}">${escapeHtml(c.tag)}</span>` : ""}
       </div>
       <span class="arrow">→</span>
@@ -6201,15 +6319,18 @@ function renderVenues(){
   setActive("venues");
   const venues = Object.values(VENUES);
   const cards = venues.map(v=>{
-    const upcoming = CONCERTS.filter(c=>c.venueId===v.id && c.status==="upcoming").length;
-    const past = CONCERTS.filter(c=>c.venueId===v.id && c.status==="past").length;
+    const here = CONCERTS.filter(c=>c.venueId===v.id);
+    const upcoming = here.filter(c=>c.status==="upcoming").length;
+    const past = here.filter(c=>c.status==="past").length;
+    const next = here.filter(c=>c.status!=="past")
+                     .sort((x,y)=>x.dateSort.localeCompare(y.dateSort))[0];
     return `
       <a class="card" href="#/venue/${v.id}" aria-label="${escapeHtml(v.name)}">
         <div class="bg" style="${bgCss(v.image)}"></div>
         <div class="shade"></div>
         <div class="topline">
           <span class="tag">${escapeHtml(v.type)}</span>
-          <span class="tag">${escapeHtml(v.area)}</span>
+          ${next ? `<span class="tag red">${escapeHtml(next.date)}</span>` : `<span class="tag">${escapeHtml(v.area)}</span>`}
         </div>
         <span class="arrow">→</span>
         <div class="body">
@@ -6240,19 +6361,33 @@ function renderArtists(){
   setActive("artists");
   const artists = Object.values(ARTISTS);
   const cards = artists.map(a=>{
-    const count = CONCERTS.filter(c=>c.artists.includes(a.id)).length;
+    const shows = CONCERTS.filter(c=>c.artists.includes(a.id));
+    const count = shows.length;
+    // Aggregate genres across this artist's concerts and pick the most common.
+    const tagCounts = {};
+    shows.forEach(c => (c.tags||[]).forEach(t => { tagCounts[t]=(tagCounts[t]||0)+1; }));
+    const topTag = Object.entries(tagCounts).sort((x,y)=>y[1]-x[1])[0]?.[0];
+    const genreChip = topTag
+      ? `<span class="tag">${escapeHtml(genreLabelFor(topTag))}</span>`
+      : "";
+    // Next upcoming date
+    const upcoming = shows.filter(c=>c.status!=="past")
+                          .sort((x,y)=>x.dateSort.localeCompare(y.dateSort));
+    const nextDate = upcoming[0]?.date || null;
     return `
       <a class="card" href="#/artist/${a.id}" aria-label="${escapeHtml(a.name)}">
         <div class="bg" style="${bgCss(a.image, a.fallback)}"></div>
         <div class="shade"></div>
         <div class="topline">
           <span class="tag">${escapeHtml(a.role)}</span>
-          <span class="tag">${escapeHtml(a.country)}</span>
+          ${genreChip}
+          ${nextDate ? `<span class="tag red">${escapeHtml(nextDate)}</span>` : ""}
         </div>
         <span class="arrow">→</span>
         <div class="body">
           <h3>${escapeHtml(a.name)}</h3>
           <div class="sub">
+            <span>${escapeHtml(a.country)}</span>
             <span>${count} date${count===1?"":"s"} on file</span>
           </div>
         </div>
@@ -6426,6 +6561,7 @@ function router(){
   renderConcerts();
 }
 window.addEventListener("hashchange", router);
+enrichConcertTags();
 router();
 </script>
 </body>
