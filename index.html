@@ -1,0 +1,1394 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live / BKK — Bangkok Live Music</title>
+<meta name="description" content="A directory of live music in Bangkok. Concerts, venues, artists. Real shows, verified sources. Updated weekly.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Inter+Tight:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0A0A0A;
+    --paper:#FFFFFF;
+    --hair:#0A0A0A;
+    --red:#E1261C;
+    --mute:rgba(10,10,10,.55);
+    --edge:32px;
+    --gap:20px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--paper);color:var(--ink)}
+  body{
+    font-family:'Inter',Helvetica,Arial,sans-serif;font-size:14px;line-height:1.5;
+    -webkit-font-smoothing:antialiased;text-rendering:geometricPrecision;
+  }
+  a{color:inherit;text-decoration:none}
+  img{display:block;max-width:100%}
+  button,input{font:inherit;color:inherit}
+  .cap{font-family:'Inter',sans-serif;font-weight:500;font-size:11px;letter-spacing:.08em;text-transform:uppercase;line-height:1.3}
+  .tight{font-family:'Inter Tight',sans-serif;font-weight:900;letter-spacing:-0.035em;text-transform:uppercase;line-height:.95}
+  .red{color:var(--red)}
+
+  /* ========== TOPBAR ========== */
+  header.bar{
+    position:sticky;top:0;z-index:20;background:var(--paper);
+    display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:24px;
+    padding:16px var(--edge);border-bottom:1px solid var(--hair);
+  }
+  .logo{
+    font-family:'Inter Tight',sans-serif;font-weight:900;font-size:18px;
+    letter-spacing:-0.04em;line-height:1;text-transform:uppercase;
+  }
+  nav.menu{display:flex;gap:28px;justify-content:center}
+  nav.menu a{
+    font-family:'Inter',sans-serif;font-weight:500;font-size:11px;
+    letter-spacing:.1em;text-transform:uppercase;padding:4px 0;
+    border-bottom:1px solid transparent;
+  }
+  nav.menu a:hover{color:var(--red)}
+  nav.menu a.active{border-bottom-color:var(--ink)}
+  nav.menu a.active:hover{border-bottom-color:var(--red)}
+  .bar-right{
+    font-family:'Inter',sans-serif;font-weight:500;font-size:11px;
+    letter-spacing:.08em;text-transform:uppercase;opacity:.55;
+  }
+
+  /* ========== PAGE HEADER ========== */
+  .page-head{
+    padding:48px var(--edge) 32px;border-bottom:1px solid var(--hair);
+    display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end;
+  }
+  .page-head h1{
+    font-family:'Inter Tight',sans-serif;font-weight:900;
+    letter-spacing:-0.05em;line-height:.88;text-transform:uppercase;
+    font-size:clamp(48px,9vw,128px);
+  }
+  .page-head h1 .red{color:var(--red)}
+  .page-head .meta{font-size:11px;letter-spacing:.08em;text-transform:uppercase;opacity:.55;text-align:right}
+  .page-head .meta b{display:block;color:var(--ink);opacity:.65;font-weight:500;margin-bottom:4px}
+
+  /* ========== FILTER BAR ========== */
+  .filters{padding:24px var(--edge) 20px;border-bottom:1px solid var(--hair)}
+  .filter-row{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-end}
+  .filter-field{display:flex;flex-direction:column;gap:8px;min-width:220px}
+  .filter-label{
+    font-family:'Inter',sans-serif;font-weight:500;font-size:11px;
+    letter-spacing:.1em;text-transform:uppercase;opacity:.55;
+  }
+  .filter-controls{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-start}
+  .dropdown{position:relative;display:inline-block;min-width:220px}
+  .dd-button{
+    font-family:'Inter',sans-serif;font-weight:500;font-size:11px;
+    letter-spacing:.08em;text-transform:uppercase;
+    padding:10px 36px 10px 14px;border:1px solid var(--ink);background:var(--paper);
+    color:var(--ink);cursor:pointer;line-height:1;width:100%;text-align:left;
+    display:inline-flex;align-items:center;justify-content:space-between;gap:12px;
+    transition:background .15s ease,color .15s ease,border-color .15s ease;
+    position:relative;
+  }
+  .dd-button::after{
+    content:"▾";position:absolute;right:12px;top:50%;transform:translateY(-50%);
+    font-size:10px;opacity:.55;
+  }
+  .dd-button:hover{border-color:var(--red);color:var(--red)}
+  .dropdown.open .dd-button{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .dropdown.open .dd-button::after{opacity:1;transform:translateY(-50%) rotate(180deg)}
+  .dropdown.has-value .dd-button{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .dd-value{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:170px}
+  .dd-count{font-size:10px;padding:2px 6px;border:1px solid currentColor;margin-left:6px}
+  .dd-panel{
+    position:absolute;top:calc(100% - 1px);left:0;right:0;min-width:240px;
+    background:var(--paper);border:1px solid var(--ink);z-index:40;
+    max-height:340px;overflow-y:auto;padding:6px 0;
+    box-shadow:0 8px 24px rgba(0,0,0,.08);
+  }
+  .dd-opt{
+    display:flex;align-items:center;gap:10px;
+    font-family:'Inter',sans-serif;font-weight:500;font-size:12px;
+    letter-spacing:.06em;text-transform:uppercase;
+    padding:10px 16px;cursor:pointer;background:transparent;border:0;width:100%;
+    text-align:left;color:var(--ink);
+  }
+  .dd-opt:hover{background:var(--ink);color:var(--paper)}
+  .dd-opt.selected{color:var(--red)}
+  .dd-opt.selected:hover{color:var(--paper)}
+  .dd-opt input[type=checkbox]{
+    appearance:none;-webkit-appearance:none;
+    width:14px;height:14px;border:1px solid currentColor;background:transparent;
+    display:inline-flex;align-items:center;justify-content:center;margin:0;flex-shrink:0;
+    cursor:pointer;
+  }
+  .dd-opt input[type=checkbox]:checked{background:currentColor}
+  .dd-opt input[type=checkbox]:checked::after{
+    content:"";width:6px;height:6px;background:var(--paper);
+  }
+  .dd-opt:hover input[type=checkbox]:checked::after{background:var(--ink)}
+  .dd-group{
+    font-family:'Inter',sans-serif;font-weight:500;font-size:10px;
+    letter-spacing:.12em;text-transform:uppercase;opacity:.45;
+    padding:10px 16px 4px;border-top:1px dashed rgba(10,10,10,.2);margin-top:4px;
+  }
+  .dd-group:first-child{border-top:0;margin-top:0}
+  .results-meta{
+    padding:18px var(--edge) 0;font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    opacity:.55;
+  }
+  .results-meta .clear{margin-left:16px;text-decoration:underline;cursor:pointer}
+  .results-meta .clear:hover{color:var(--red)}
+  .empty-state{
+    padding:72px var(--edge);text-align:center;
+    font-family:'Inter Tight',sans-serif;font-weight:900;font-size:32px;
+    letter-spacing:-0.03em;text-transform:uppercase;opacity:.35;
+  }
+  .empty-state .small{display:block;margin-top:16px;font-family:'Inter',sans-serif;font-weight:500;font-size:12px;letter-spacing:.08em;text-transform:uppercase;opacity:.8}
+  @media (max-width:700px){
+    .filter-row{flex-direction:column;gap:14px;align-items:stretch}
+    .filter-field{min-width:0}
+    .dropdown{min-width:0;width:100%}
+  }
+
+  /* ========== CARD GRID ========== */
+  .grid{
+    display:grid;gap:var(--gap);padding:32px var(--edge) 96px;
+    grid-template-columns:repeat(3,1fr);
+  }
+  @media (min-width:1280px){.grid{grid-template-columns:repeat(4,1fr)}}
+  @media (max-width:980px){.grid{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:560px){.grid{grid-template-columns:1fr;padding:20px var(--edge) 72px}}
+
+  .card{
+    position:relative;display:flex;flex-direction:column;
+    aspect-ratio:3/4;background:#0A0A0A;color:#F7F7F7;
+    overflow:hidden;cursor:pointer;
+    transition:transform .35s cubic-bezier(.2,.7,.2,1);
+  }
+  .card .bg{
+    position:absolute;inset:0;background-size:cover;background-position:center;
+    filter:grayscale(1) contrast(1.05) brightness(.82);
+    transition:filter .5s ease,transform .8s cubic-bezier(.2,.7,.2,1);
+  }
+  .card:hover .bg{filter:grayscale(0) contrast(1.02) brightness(.92);transform:scale(1.04)}
+  .card .shade{
+    position:absolute;inset:0;
+    background:linear-gradient(180deg,rgba(0,0,0,0) 30%,rgba(0,0,0,.55) 70%,rgba(0,0,0,.85) 100%);
+  }
+  .card .topline{
+    position:relative;z-index:2;padding:18px 18px 0;display:flex;justify-content:space-between;gap:8px;
+    font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  }
+  .card .topline .tag{color:#F7F7F7;opacity:.85}
+  .card .topline .tag.red{color:#fff;background:var(--red);padding:3px 6px;opacity:1;letter-spacing:.08em}
+  .card .body{
+    position:relative;z-index:2;margin-top:auto;padding:0 18px 18px;
+  }
+  .card h3{
+    font-family:'Inter Tight',sans-serif;font-weight:900;
+    letter-spacing:-0.03em;line-height:.95;text-transform:uppercase;
+    font-size:clamp(20px,2vw,28px);
+  }
+  .card .sub{
+    margin-top:8px;font-size:11px;letter-spacing:.07em;text-transform:uppercase;
+    opacity:.85;display:flex;flex-direction:column;gap:2px;
+  }
+  .card .arrow{
+    position:absolute;right:14px;top:14px;z-index:2;
+    font-family:'Inter Tight',sans-serif;font-weight:900;font-size:18px;opacity:0;
+    transition:opacity .3s ease;
+  }
+  .card:hover .arrow{opacity:1}
+
+  /* featured large card (first item on concerts page) */
+  .grid.concerts .card:first-child{grid-column:span 2;aspect-ratio:2/1.1}
+  .grid.concerts .card:first-child h3{font-size:clamp(28px,3.5vw,52px)}
+  @media (max-width:980px){
+    .grid.concerts .card:first-child{grid-column:span 2;aspect-ratio:4/3}
+  }
+  @media (max-width:560px){
+    .grid.concerts .card:first-child{grid-column:span 1;aspect-ratio:3/4}
+    .grid.concerts .card:first-child h3{font-size:24px}
+  }
+
+  /* ========== DETAIL PAGE ========== */
+  .detail{padding:0 var(--edge) 96px}
+  .detail .back{
+    display:inline-flex;gap:10px;align-items:center;padding:24px 0;
+    font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  }
+  .detail .back:hover{color:var(--red)}
+  .detail .hero{
+    position:relative;aspect-ratio:16/7;overflow:hidden;background:#0A0A0A;color:#F7F7F7;
+    border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);
+  }
+  @media (max-width:980px){.detail .hero{aspect-ratio:4/3}}
+  .detail .hero .bg{
+    position:absolute;inset:0;background-size:cover;background-position:center;
+    filter:grayscale(1) contrast(1.05) brightness(.8);
+  }
+  .detail .hero .shade{
+    position:absolute;inset:0;
+    background:linear-gradient(180deg,rgba(0,0,0,0) 40%,rgba(0,0,0,.7) 100%);
+  }
+  .detail .hero .hero-content{
+    position:absolute;inset:auto 0 0 0;padding:40px 32px;z-index:2;
+    display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;
+  }
+  .detail .hero h1{
+    font-family:'Inter Tight',sans-serif;font-weight:900;
+    letter-spacing:-0.045em;line-height:.88;text-transform:uppercase;
+    font-size:clamp(40px,6vw,96px);max-width:20ch;
+  }
+  .detail .hero h1 .red{color:var(--red)}
+  .detail .hero .tag-row{display:flex;gap:8px;flex-wrap:wrap;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+  .detail .hero .tag-row span{border:1px solid rgba(247,247,247,.55);padding:4px 8px}
+  .detail .hero .tag-row span.on{background:var(--red);border-color:var(--red)}
+
+  .detail .body{
+    display:grid;grid-template-columns:5fr 7fr;gap:48px;padding:48px 0 0;
+  }
+  @media (max-width:980px){.detail .body{grid-template-columns:1fr;gap:24px}}
+  .detail .meta{display:flex;flex-direction:column;gap:18px}
+  .detail .meta .row{border-top:1px solid var(--hair);padding-top:10px;font-size:13px}
+  .detail .meta .row b{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;opacity:.55;font-weight:500;margin-bottom:4px}
+  .detail .meta .cta{
+    margin-top:8px;border-top:2px solid var(--ink);padding-top:14px;
+    font-family:'Inter Tight',sans-serif;font-weight:900;font-size:20px;letter-spacing:-0.02em;text-transform:uppercase;
+  }
+  .detail .meta .cta a{border-bottom:2px solid var(--ink);padding-bottom:2px}
+  .detail .meta .cta a:hover{color:var(--red);border-bottom-color:var(--red)}
+  .detail .prose h2{
+    font-family:'Inter Tight',sans-serif;font-weight:900;
+    letter-spacing:-0.035em;line-height:.95;text-transform:uppercase;
+    font-size:clamp(28px,3.5vw,44px);margin-bottom:20px;
+  }
+  .detail .prose p{font-size:16px;line-height:1.5;margin-bottom:18px;max-width:60ch}
+
+  /* related section */
+  .related{padding:64px var(--edge) 0}
+  .related h4{
+    font-family:'Inter Tight',sans-serif;font-weight:900;
+    letter-spacing:-0.02em;text-transform:uppercase;font-size:20px;
+    border-bottom:1px solid var(--hair);padding-bottom:12px;margin-bottom:20px;
+  }
+
+  /* ========== FOOTER ========== */
+  footer{padding:64px var(--edge) 40px;border-top:1px solid var(--hair)}
+  footer .f-grid{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end}
+  footer .bm{
+    font-family:'Inter Tight',sans-serif;font-weight:900;
+    letter-spacing:-0.05em;line-height:.86;text-transform:uppercase;
+    font-size:clamp(48px,9vw,120px);
+  }
+  footer .bm .red{color:var(--red)}
+  footer .f-meta{font-size:11px;letter-spacing:.08em;text-transform:uppercase;opacity:.55;text-align:right;line-height:1.6}
+  footer .f-meta b{display:block;color:var(--ink);opacity:.75;font-weight:500}
+  @media (max-width:700px){
+    footer .f-grid{grid-template-columns:1fr}
+    footer .f-meta{text-align:left}
+  }
+
+  /* mobile nav */
+  @media (max-width:700px){
+    :root{--edge:20px}
+    header.bar{grid-template-columns:1fr auto}
+    .bar-right{display:none}
+    nav.menu{gap:14px;font-size:10px;grid-column:1 / -1;justify-content:flex-start;order:3;margin-top:4px}
+  }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <a class="logo" href="#/">Live / BKK</a>
+  <nav class="menu">
+    <a href="#/" data-view="concerts">Concerts &amp; Festivals</a>
+    <a href="#/venues" data-view="venues">Venues</a>
+    <a href="#/artists" data-view="artists">Artists</a>
+  </nav>
+  <div class="bar-right">Bangkok · Updated weekly</div>
+</header>
+
+<main id="app"></main>
+
+<footer>
+  <div class="f-grid">
+    <div class="bm">Live /<br><span class="red">BKK.</span></div>
+    <div class="f-meta">
+      <b>Live / BKK Editorial</b>
+      Krungthep · 13.7563°N · 100.5018°E<br>
+      Sourced from Eventpop · Verified weekly<br>
+      <span id="last-updated">Last updated · 22 Apr 2026</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ======================================================================
+   DATA — sourced from Eventpop (22 Apr 2026)
+   Update weekly. Each entry has a stable id used in the URL hash.
+   ====================================================================== */
+
+const VENUES = {
+  "mrfox": {
+    id:"mrfox", name:"Mr.FOX Live House", city:"Bangkok", type:"Livehouse",
+    cap:"~350", area:"Bangkok",
+    image:"https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=1600&q=80",
+    blurb:"Dedicated rock, J-rock and V-kei livehouse in central Bangkok. Home of the annual BangkokBeasts showcase.",
+    long:"Mr.FOX Live House is the Bangkok venue-of-record for imported J-rock, visual-kei and local heavy indie. Over the last two years it has hosted DEXCORE, SKEGSS, HIZAKI × Kaya, Jupiter and its own recurring flagship — BangkokBeasts. The next edition lands in November 2026.",
+    link:"https://www.eventpop.me/search?q=mr.fox&sort_by=by_sooner",
+    linkLabel:"Listings on Eventpop"
+  },
+  "marshall": {
+    id:"marshall", name:"Marshall Livehouse", city:"Bangkok", type:"Livehouse",
+    cap:"~500", area:"Bangkok",
+    image:"https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=1600&q=80",
+    blurb:"Mid-size rock room hosting Thai indie tours and regional bills.",
+    long:"Marshall Livehouse is a mid-capacity rock room regularly hosting Thai indie tours and regional bills. Bitter Sweet plays there on 9 May 2026.",
+    link:"https://www.eventpop.me/search?q=marshall+livehouse&sort_by=by_sooner",
+    linkLabel:"Listings on Eventpop"
+  },
+  "princemahidol": {
+    id:"princemahidol", name:"Prince Mahidol Hall", city:"Salaya, Nakhon Pathom", type:"Concert hall",
+    cap:"~2,000", area:"Mahidol University campus",
+    image:"https://images.unsplash.com/photo-1465847899084-d164df4dedc6?auto=format&fit=crop&w=1600&q=80",
+    blurb:"Mahidol University's formal concert hall. Orchestral and recital programming.",
+    long:"Prince Mahidol Hall is Mahidol University's formal 2,000-seat concert hall in Salaya. It hosts classical recitals, touring orchestras and live-to-picture film scores. Upcoming: How To Train Your Dragon In Concert (16 May 2026) and Ray Chen's violin recital (7 Jun 2026).",
+    link:"https://www.eventpop.me/search?q=prince+mahidol&sort_by=by_sooner",
+    linkLabel:"Listings on Eventpop"
+  },
+  "tcc": {
+    id:"tcc", name:"Thailand Cultural Centre", city:"Huai Khwang, Bangkok", type:"Concert hall",
+    cap:"~2,000 (Main Hall)", area:"Ratchadapisek",
+    image:"https://images.unsplash.com/photo-1511192336575-5a79af67a629?auto=format&fit=crop&w=1600&q=80",
+    blurb:"The state's primary hall for symphonic, film score and touring productions.",
+    long:"The Thailand Cultural Centre (TCC) is the state hall of record for symphonic music, live-to-picture shows and large-scale touring productions. Upcoming: Music of Square Enix (18 Jul 2026).",
+    link:"https://www.eventpop.me/search?q=thailand+cultural+centre&sort_by=by_sooner",
+    linkLabel:"Listings on Eventpop"
+  },
+  "lido": {
+    id:"lido", name:"Lido Connect", city:"Siam Square, Bangkok", type:"Livehouse",
+    cap:"~700", area:"Siam Square",
+    image:"https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=1600&q=80",
+    blurb:"Repurposed art-house cinema. Indie pop, singer-songwriter, one-off tours.",
+    long:"Lido Connect is a repurposed art-house cinema in Siam Square converted into a tiered live stage. It programs indie pop, singer-songwriter sets and one-off touring shows across three screens.",
+    link:"https://www.eventpop.me/search?q=lido+connect&sort_by=by_sooner",
+    linkLabel:"Listings on Eventpop"
+  },
+  "impact": {
+    id:"impact", name:"Impact Arena", city:"Muang Thong Thani", type:"Arena",
+    cap:"~12,000", area:"Nonthaburi",
+    image:"https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&w=1600&q=80",
+    blurb:"Thailand's arena of record. International tours and stadium pop.",
+    long:"Impact Arena is Thailand's arena of record — the standard venue for international stadium tours, major Thai pop tours, and K-pop dates. Located in Muang Thong Thani, Nonthaburi.",
+    link:"https://www.eventpop.me/search?q=impact+arena&sort_by=by_sooner",
+    linkLabel:"Listings on Eventpop"
+  },
+  "worldsiam": {
+    id:"worldsiam", name:"World Siam Stadium", city:"Bangkok", type:"Multi-use",
+    cap:"Varies", area:"Bangkok",
+    image:"https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1600&q=80",
+    blurb:"Combat sports and concerts under one roof. Mixed programming.",
+    long:"World Siam Stadium is a mixed-use Bangkok venue hosting Muay Thai, combat sports events and periodic live concerts.",
+    link:"https://www.eventpop.me/search?q=world+siam+stadium&sort_by=by_sooner",
+    linkLabel:"Listings on Eventpop"
+  }
+};
+
+const ARTISTS = {
+  "bangkokbeasts": {
+    id:"bangkokbeasts", name:"BangkokBeasts", role:"Rock showcase",
+    image:"https://p-u.popcdn.net/event_details/posters/000/118/637/medium/51465b96b36adbbe3a20124c8e6e194e62945e65.jpeg",
+    fallback:"https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=1600&q=80",
+    country:"Thailand",
+    blurb:"Annual Bangkok rock showcase. Fifth edition — Furbidden Vault — lands 14 Nov 2026 at Mr.FOX.",
+    long:"BangkokBeasts is the annual multi-band rock showcase hosted at Mr.FOX Live House. Previous editions (2025: The Furtune Teller) have sold out the room. The 2026 edition, Furbidden Vault, is scheduled for Saturday, 14 November 2026.",
+    concerts:["bangkokbeasts-2026"]
+  },
+  "bittersweet": {
+    id:"bittersweet", name:"Bitter Sweet", role:"Indie pop",
+    image:"https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&w=1600&q=80",
+    country:"Thailand",
+    blurb:"Long-running Thai indie-pop act on tour.",
+    long:"Bitter Sweet is a long-running Thai indie-pop band with a dedicated following across Southeast Asia. Their 2026 Bangkok date is 9 May at Marshall Livehouse.",
+    concerts:["bittersweet-2026"]
+  },
+  "raychen": {
+    id:"raychen", name:"Ray Chen", role:"Violinist",
+    image:"https://images.unsplash.com/photo-1465821185615-20b3c2fbf41b?auto=format&fit=crop&w=1600&q=80",
+    country:"International",
+    blurb:"Award-winning Taiwanese-Australian violinist on a recital tour.",
+    long:"Ray Chen is an internationally acclaimed violinist whose recital tours routinely sell out major halls. His Bangkok date is Sunday, 7 June 2026 at Prince Mahidol Hall, Salaya.",
+    concerts:["raychen-2026"]
+  },
+  "httyd": {
+    id:"httyd", name:"How To Train Your Dragon — In Concert", role:"Live-to-picture film score",
+    image:"https://images.unsplash.com/photo-1465847899084-d164df4dedc6?auto=format&fit=crop&w=1600&q=80",
+    country:"International touring production",
+    blurb:"John Powell's score performed live to the full feature film.",
+    long:"The touring live-to-picture production of How To Train Your Dragon pairs the full feature film with John Powell's score performed live by a full orchestra. Bangkok date: 16 May 2026 at Prince Mahidol Hall.",
+    concerts:["httyd-2026"]
+  },
+  "squareenix": {
+    id:"squareenix", name:"Music of Square Enix", role:"Video-game score concert",
+    image:"https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=1600&q=80",
+    country:"International touring production",
+    blurb:"Symphonic performance of Square Enix's best-known game scores.",
+    long:"Music of Square Enix is a touring symphonic programme featuring the publisher's most recognisable game scores, including Final Fantasy and Kingdom Hearts selections. Bangkok: 18 July 2026 at TCC.",
+    concerts:["squareenix-2026"]
+  },
+  "dexcore": {
+    id:"dexcore", name:"DEXCORE", role:"J-rock",
+    image:"https://p-u.popcdn.net/event_details/posters/000/037/285/medium/e5be3d3b21e0eb620f543632208536ff9edcc465.jpg",
+    fallback:"https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=1600&q=80",
+    country:"Japan",
+    blurb:"Tokyo-based J-rock band. Played Mr.FOX in 2024.",
+    long:"DEXCORE is a Tokyo-based J-rock band. Their Bangkok date at Mr.FOX Live House was Saturday, 3 August 2024.",
+    concerts:["dexcore-2024"]
+  },
+  "jupiter": {
+    id:"jupiter", name:"Jupiter", role:"Visual-kei",
+    image:"https://p-u.popcdn.net/event_details/posters/000/087/536/medium/f785bf0618cbd9248a03d5db53a80288e061cc58.jpg",
+    fallback:"https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=1600&q=80",
+    country:"Japan",
+    blurb:"Symphonic visual-kei band. Played Mr.FOX in 2025.",
+    long:"Jupiter is a Japanese symphonic visual-kei band. Their Bangkok date at Mr.FOX Live House was Saturday, 2 August 2025.",
+    concerts:["jupiter-2025"]
+  },
+  "hizaki": {
+    id:"hizaki", name:"HIZAKI × Kaya", role:"Visual-kei",
+    image:"https://p-u.popcdn.net/event_details/posters/000/049/231/medium/4750d7b50914a3f6f594acf84912a0fe1b086fdb.jpg",
+    fallback:"https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=1600&q=80",
+    country:"Japan",
+    blurb:"Grace Addict — a visual-kei collaboration.",
+    long:"HIZAKI × Kaya — Grace Addict — performed at Mr.FOX Live House on 30 November 2024 as part of their Bangkok date.",
+    concerts:["hizaki-2024"]
+  }
+};
+
+const CONCERTS = [
+  {
+    id:"bangkokbeasts-2026",
+    title:"BangkokBeasts 2026 — Furbidden Vault",
+    date:"Sat 14 Nov 2026",
+    dateSort:"2026-11-14",
+    added:"2026-04-18",
+    tags:["rock","alternative","metal"],
+    venueId:"mrfox",
+    artists:["bangkokbeasts"],
+    genre:"Rock · Showcase",
+    status:"upcoming",
+    price:"On sale",
+    tag:"Cover story",
+    image:"https://p-u.popcdn.net/event_details/posters/000/118/637/medium/51465b96b36adbbe3a20124c8e6e194e62945e65.jpeg",
+    fallback:"https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=1600&q=80",
+    blurb:"The annual rock showcase returns for its fifth edition — Furbidden Vault — at Mr.FOX Live House.",
+    long:"BangkokBeasts returns to Mr.FOX Live House for its fifth edition, themed Furbidden Vault. Previous editions have sold out the 350-cap room. Expect a multi-band bill spanning heavy indie, J-rock and visual-kei.",
+    link:"https://www.eventpop.me/e/118637/https-bangkokbeasts-com-2026",
+    linkLabel:"Tickets on Eventpop"
+  },
+  {
+    id:"wednesdaysong20-2026",
+    title:"Wednesday Song Vol.20 — ชรัส เฟื่องอารมย์ × มาลีวัลย์ เจมีน่า",
+    date:"Wed 29 Apr 2026",
+    dateSort:"2026-04-29",
+    added:"2026-04-23",
+    tags:["other"],
+    venueId:"",
+    venueName:"SiamPic Hall, Bangkok",
+    artists:["charas-fueangarom","maleewan-jemina"],
+    genre:"Thai Legacy · Vocal",
+    status:"upcoming",
+    price:"From 900 THB",
+    tag:"",
+    image:"https://p-u.popcdn.net/event_details/posters/000/133/549/medium/9ae50aa8cd25e0ee80cb87212687b87fc8075185.jpg",
+    fallback:"https://images.unsplash.com/photo-1465821185615-20b3c2fbf41b?auto=format&fit=crop&w=1600&q=80",
+    blurb:"Thai legacy vocalists Charas Fueangarom and Maleewan Jemina take on the Wednesday Song series.",
+    long:"Wednesday Song returns for its 20th edition at SiamPic Hall with Thai legacy vocalists Charas Fueangarom and Maleewan Jemina performing a Playlist Pod set of golden-era songs. Single-night, mid-week show.",
+    link:"https://www.eventpop.me/e/133549/wednesdaysong20",
+    linkLabel:"Tickets on Eventpop"
+  },
+  {
+    id:"bittersweet-2026",
+    title:"Bitter Sweet — Live",
+    date:"Sat 09 May 2026",
+    dateSort:"2026-05-09",
+    added:"2026-04-20",
+    tags:["indie","pop"],
+    venueId:"marshall",
+    artists:["bittersweet"],
+    genre:"Indie Pop",
+    status:"upcoming",
+    price:"On sale",
+    tag:"",
+    image:"https://p-u.popcdn.net/event_details/posters/000/115/365/medium/b9ef1e52062f9322e03dab17b563ef80405a0093.jpg",
+    fallback:"https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&w=1600&q=80",
+    blurb:"Bitter Sweet\'s Bangkok headline date at Marshall Livehouse.",
+    long:"Bitter Sweet plays a Bangkok headline night at Marshall Livehouse as part of their 2026 run. Doors and support TBA on the Eventpop listing.",
+    link:"https://www.eventpop.me/e/115365",
+    linkLabel:"Tickets on Eventpop"
+  },
+  {
+    id:"httyd-2026",
+    title:"How To Train Your Dragon — In Concert",
+    date:"Sat 16 May 2026",
+    dateSort:"2026-05-16",
+    added:"2026-04-14",
+    tags:["other"],
+    venueId:"princemahidol",
+    artists:["httyd"],
+    genre:"Film Score · Live-to-picture",
+    status:"upcoming",
+    price:"On sale",
+    tag:"",
+    image:"https://p-u.popcdn.net/event_details/posters/000/130/264/medium/c3852013898ab57fcce66824b106fede3b170762.jpg",
+    fallback:"https://images.unsplash.com/photo-1465847899084-d164df4dedc6?auto=format&fit=crop&w=1600&q=80",
+    blurb:"John Powell\'s score performed live to the full feature film with orchestra.",
+    long:"The touring live-to-picture production pairs the full How To Train Your Dragon film with John Powell\'s score performed live by a full orchestra. Family-friendly, single-night Bangkok run at Prince Mahidol Hall, Salaya.",
+    link:"https://www.eventpop.me/e/130264/how-to-train-your-dragon",
+    linkLabel:"Tickets on Eventpop"
+  },
+  {
+    id:"moveon-2026",
+    title:"MOVE ON จนโคจรมาเจอกัน Concert 2026",
+    date:"Sat 06 Jun 2026",
+    dateSort:"2026-06-06",
+    added:"2026-04-23",
+    tags:["pop"],
+    venueId:"",
+    venueName:"UOB Live, EmSphere",
+    artists:[],
+    genre:"Thai Pop · Concert",
+    status:"upcoming",
+    price:"On sale",
+    tag:"",
+    image:"https://p-u.popcdn.net/event_details/posters/000/140/314/medium/f1f17cdd7d43f20dbce1932e43836333fab047c5.jpg",
+    fallback:"https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=1600&q=80",
+    blurb:"Thai pop concert night at UOB Live, EmSphere.",
+    long:"MOVE ON จนโคจรมาเจอกัน Concert 2026 — a Thai pop concert at UOB Live, EmSphere. Single-night Bangkok date.",
+    link:"https://www.eventpop.me/e/140314/moveonconcert5",
+    linkLabel:"Tickets on Eventpop"
+  },
+  {
+    id:"raychen-2026",
+    title:"Ray Chen — Violin Recital",
+    date:"Sun 07 Jun 2026",
+    dateSort:"2026-06-07",
+    added:"2026-04-05",
+    tags:["other"],
+    venueId:"princemahidol",
+    artists:["raychen"],
+    genre:"Classical · Recital",
+    status:"upcoming",
+    price:"On sale",
+    tag:"",
+    image:"https://images.unsplash.com/photo-1465821185615-20b3c2fbf41b?auto=format&fit=crop&w=1600&q=80",
+    blurb:"Award-winning violinist Ray Chen in a single-night recital.",
+    long:"Ray Chen brings his 2026 recital tour to Prince Mahidol Hall, Salaya, for a single Bangkok date. Programme TBA on the Eventpop listing.",
+    link:"https://www.eventpop.me/search?q=ray+chen&sort_by=by_sooner",
+    linkLabel:"Tickets on Eventpop"
+  },
+  {
+    id:"sillyfools-2026",
+    title:"LEO presents 30 ปี Silly Fools Concert",
+    date:"Sat 13 Jun 2026",
+    dateSort:"2026-06-13",
+    added:"2026-04-23",
+    tags:["rock","alternative"],
+    venueId:"",
+    venueName:"Impact Arena, Muang Thong Thani",
+    artists:["sillyfools"],
+    genre:"Thai Rock · Anniversary",
+    status:"upcoming",
+    price:"On sale",
+    tag:"",
+    image:"https://p-u.popcdn.net/event_details/posters/000/140/716/medium/6f15be33f687af5f77e27d6c0f4df366e188cf21.jpg",
+    fallback:"https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=1600&q=80",
+    blurb:"Silly Fools mark 30 years with a single-night arena show at Impact.",
+    long:"LEO presents the 30 ปี Silly Fools Concert — Thai rock veterans Silly Fools mark three decades together with a single arena show at Impact Arena, Muang Thong Thani. Expect a career-spanning set.",
+    link:"https://www.eventpop.me/e/140716/30yrs-silly-fools",
+    linkLabel:"Tickets on Eventpop"
+  },
+  {
+    id:"persona5-2026",
+    title:"PERSONA 5 Special Big Band Concert — Asia Tour 2026",
+    date:"Tue 16 Jun 2026",
+    dateSort:"2026-06-16",
+    added:"2026-04-23",
+    tags:["jazz","other"],
+    venueId:"",
+    venueName:"Union Hall, Bangkok",
+    artists:["persona5"],
+    genre:"Game Score · Big Band",
+    status:"upcoming",
+    price:"On sale",
+    tag:"",
+    image:"https://p-u.popcdn.net/event_details/posters/000/137/068/medium/f9aa8aac9feb2d23df9ead0696cdcb042b6e8121.jpeg",
+    fallback:"https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=1600&q=80",
+    blurb:"Big-band reinterpretation of the Persona 5 score on its Asia tour.",
+    long:"The PERSONA 5 Special Big Band Concert Asia Tour 2026 stops at Union Hall, Bangkok, with a jazz big-band reinterpretation of the cult Atlus RPG soundtrack. Single Bangkok date.",
+    link:"https://www.eventpop.me/e/137068/persona-5-big-band-concert",
+    linkLabel:"Tickets on Eventpop"
+  },
+  {
+    id:"squareenix-2026",
+    title:"The Music of SQUARE ENIX — Magic, Memories, and Melodies",
+    date:"Sat 18 Jul 2026",
+    dateSort:"2026-07-18",
+    added:"2026-03-28",
+    tags:["other"],
+    venueId:"princemahidol",
+    artists:["squareenix"],
+    genre:"Game Score · Live orchestra",
+    status:"upcoming",
+    price:"On sale",
+    tag:"",
+    image:"https://p-u.popcdn.net/event_details/posters/000/132/687/medium/d1e99908c1e5951f871c9f07122a42a496839d95.jpg",
+    fallback:"https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=1600&q=80",
+    blurb:"Symphonic programme of Square Enix\'s most-loved video game scores.",
+    long:"The Music of SQUARE ENIX — Magic, Memories, and Melodies brings Square Enix\'s best-known game scores to Prince Mahidol Hall, Salaya, with selections from Final Fantasy, Kingdom Hearts and beyond. Single Bangkok date.",
+    link:"https://www.eventpop.me/e/132687/music-of-square-enix",
+    linkLabel:"Tickets on Eventpop"
+  },
+  /* ---- past shows (archive, Mr.FOX) ---- */
+  {
+    id:"bangkokbeasts-2025",
+    title:"BangkokBeasts 2025 — The Furtune Teller",
+    date:"Sat 15 Nov 2025",
+    dateSort:"2025-11-15",
+    added:"2025-06-01",
+    tags:["rock","alternative","metal"],
+    venueId:"mrfox",
+    artists:["bangkokbeasts"],
+    genre:"Rock · Showcase",
+    status:"past",
+    price:"Past · Sold out",
+    tag:"Past",
+    image:"https://p-u.popcdn.net/event_details/posters/000/075/565/medium/4e9e2ee175e25ade48e1a16670e39edd5e13a083.jpg",
+    fallback:"https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=1600&q=80",
+    blurb:"The fourth BangkokBeasts edition — a sold-out Mr.FOX night.",
+    long:"BangkokBeasts 2025 — The Furtune Teller — was the fourth edition of the showcase, hosted at Mr.FOX Live House and sold-out in advance. Set up the story for the 2026 edition.",
+    link:"https://www.eventpop.me/e/75565/bangkokbeasts2025",
+    linkLabel:"Archived listing"
+  },
+  {
+    id:"jupiter-2025",
+    title:"Jupiter — Live in Bangkok 2025",
+    date:"Sat 02 Aug 2025",
+    dateSort:"2025-08-02",
+    added:"2025-03-01",
+    tags:["rock","metal"],
+    venueId:"mrfox",
+    artists:["jupiter"],
+    genre:"Visual-kei",
+    status:"past",
+    price:"Past",
+    tag:"Past",
+    image:"https://p-u.popcdn.net/event_details/posters/000/087/536/medium/f785bf0618cbd9248a03d5db53a80288e061cc58.jpg",
+    fallback:"https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=1600&q=80",
+    blurb:"Jupiter\'s Bangkok date at Mr.FOX Live House.",
+    long:"Jupiter performed at Mr.FOX Live House on 2 August 2025 as part of their Southeast Asian run.",
+    link:"https://www.eventpop.me/e/87536",
+    linkLabel:"Archived listing"
+  },
+  {
+    id:"hizaki-2024",
+    title:"HIZAKI × Kaya — Grace Addict",
+    date:"Sat 30 Nov 2024",
+    dateSort:"2024-11-30",
+    added:"2024-08-01",
+    tags:["rock","metal"],
+    venueId:"mrfox",
+    artists:["hizaki"],
+    genre:"Visual-kei",
+    status:"past",
+    price:"Past",
+    tag:"Past",
+    image:"https://p-u.popcdn.net/event_details/posters/000/049/231/medium/4750d7b50914a3f6f594acf84912a0fe1b086fdb.jpg",
+    fallback:"https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&w=1600&q=80",
+    blurb:"HIZAKI × Kaya\'s Grace Addict Bangkok date.",
+    long:"HIZAKI × Kaya performed Grace Addict at Mr.FOX Live House on 30 November 2024.",
+    link:"https://www.eventpop.me/e/49231",
+    linkLabel:"Archived listing"
+  },
+  {
+    id:"dexcore-2024",
+    title:"DEXCORE — Live in Bangkok 2024",
+    date:"Sat 03 Aug 2024",
+    dateSort:"2024-08-03",
+    added:"2024-05-01",
+    tags:["rock","metal","alternative"],
+    venueId:"mrfox",
+    artists:["dexcore"],
+    genre:"J-rock",
+    status:"past",
+    price:"Past",
+    tag:"Past",
+    image:"https://p-u.popcdn.net/event_details/posters/000/037/285/medium/e5be3d3b21e0eb620f543632208536ff9edcc465.jpg",
+    fallback:"https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=1600&q=80",
+    blurb:"DEXCORE\'s Bangkok date at Mr.FOX Live House.",
+    long:"DEXCORE performed at Mr.FOX Live House on 3 August 2024 — one of their first Bangkok dates.",
+    link:"https://www.eventpop.me/e/37285/https-www-facebook-com-jrockencryption",
+    linkLabel:"Archived listing"
+  },
+  /* ---- festivals ---- */
+  {
+    id:"mahorasop-2026",
+    title:"Maho Rasop 2026",
+    date:"Late 2026 · Date TBA",
+    dateSort:"2026-12-01",
+    added:"2026-04-10",
+    tags:["indie","alternative","rock"],
+    venueId:"",
+    venueName:"Bangkok · Venue TBA",
+    artists:[],
+    genre:"Festival · Indie international",
+    status:"festival",
+    price:"TBA",
+    tag:"Festival",
+    image:"https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=1600&q=80",
+    blurb:"Bangkok\'s flagship international indie festival.",
+    long:"Maho Rasop is Bangkok\'s long-running indie-international festival. 2026 edition confirmed, with date and lineup TBA on the organiser\'s channels.",
+    link:"https://www.eventpop.me/search?q=maho+rasop&sort_by=by_sooner",
+    linkLabel:"Listings on Eventpop"
+  },
+  {
+    id:"bigmountain-2026",
+    title:"Big Mountain Music Festival 2026",
+    date:"Dec 2026 · Date TBA",
+    dateSort:"2026-12-05",
+    added:"2026-02-15",
+    tags:["pop","rock","indie","hiphop","electronic"],
+    venueId:"",
+    venueName:"The Ocean · Khao Yai",
+    artists:[],
+    genre:"Festival · Thai multi-genre",
+    status:"festival",
+    price:"TBA",
+    tag:"Festival",
+    image:"https://images.unsplash.com/photo-1506157786151-b8491531f063?auto=format&fit=crop&w=1600&q=80",
+    blurb:"Thailand\'s largest multi-genre festival, outside Khao Yai.",
+    long:"Big Mountain is Thailand\'s largest multi-genre music festival, typically staged outside Khao Yai in December. 2026 edition TBA.",
+    link:"https://www.eventpop.me/search?q=big+mountain&sort_by=by_sooner",
+    linkLabel:"Listings on Eventpop"
+  },
+  {
+    id:"wonderfruit-2026",
+    title:"Wonderfruit 2026",
+    date:"Dec 2026 · Dates TBA",
+    dateSort:"2026-12-10",
+    added:"2026-03-01",
+    tags:["electronic","indie","other"],
+    venueId:"",
+    venueName:"The Fields · Pattaya",
+    artists:[],
+    genre:"Festival · Arts, music, food",
+    status:"festival",
+    price:"TBA",
+    tag:"Festival",
+    image:"https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=1600&q=80",
+    blurb:"Arts-and-music gathering at The Fields, Pattaya.",
+    long:"Wonderfruit is the multi-day arts, music and food gathering at The Fields, near Pattaya. 2026 edition TBA.",
+    link:"https://www.eventpop.me/search?q=wonderfruit&sort_by=by_sooner",
+    linkLabel:"Listings on Eventpop"
+  },
+  {
+    id:"catexpo-2026",
+    title:"Cat Expo 2026",
+    date:"Nov 2026 · Dates TBA",
+    dateSort:"2026-11-20",
+    added:"2026-02-28",
+    tags:["indie","alternative","pop"],
+    venueId:"",
+    venueName:"Peppermint Field · Khao Yai",
+    artists:[],
+    genre:"Festival · Thai indie",
+    status:"festival",
+    price:"TBA",
+    tag:"Festival",
+    image:"https://images.unsplash.com/photo-1506157786151-b8491531f063?auto=format&fit=crop&w=1600&q=80",
+    blurb:"Cat Radio\'s annual Thai-indie festival outside Khao Yai.",
+    long:"Cat Expo is the annual Thai-indie festival staged at Peppermint Field outside Khao Yai, programmed by Cat Radio. 2026 edition TBA.",
+    link:"https://www.eventpop.me/search?q=cat+expo&sort_by=by_sooner",
+    linkLabel:"Listings on Eventpop"
+  }
+];
+
+/* ======================================================================
+   ROUTER
+   ====================================================================== */
+const app = document.getElementById("app");
+
+function escapeHtml(s){return (s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]))}
+function pad(n){return n.toString().padStart(2,"0")}
+
+function bgCss(img, fallback){
+  const urls = [img, fallback].filter(Boolean).map(u=>`url('${u}')`).join(",");
+  return `background-image:${urls}`;
+}
+
+function setActive(view){
+  document.querySelectorAll("nav.menu a").forEach(a=>{
+    a.classList.toggle("active", a.dataset.view===view);
+  });
+}
+
+/* ---------- FILTER STATE ---------- */
+const GENRES = [
+  {id:"all", label:"All Genres"},
+  {id:"alternative", label:"Alternative"},
+  {id:"electronic", label:"Electronic"},
+  {id:"hiphop", label:"Hip Hop"},
+  {id:"indie", label:"Indie"},
+  {id:"jazz", label:"Jazz"},
+  {id:"metal", label:"Metal"},
+  {id:"other", label:"Other"},
+  {id:"pop", label:"Pop"},
+  {id:"rnb", label:"R&b"},
+  {id:"rock", label:"Rock"}
+];
+const MONTHS_2026 = [
+  ["2026-01","January"],["2026-02","February"],["2026-03","March"],
+  ["2026-04","April"],["2026-05","May"],["2026-06","June"],
+  ["2026-07","July"],["2026-08","August"],["2026-09","September"],
+  ["2026-10","October"],["2026-11","November"],["2026-12","December"]
+];
+const state = { when:"any", whenMonth:"", genres:[], recent:false };
+
+function today(){ return new Date(); }
+function iso(d){ return d.toISOString().slice(0,10); }
+function startOfDay(d){ const x=new Date(d); x.setHours(0,0,0,0); return x; }
+function addDays(d,n){ const x=new Date(d); x.setDate(x.getDate()+n); return x; }
+
+function dateMatches(c, when, month){
+  if(!c.dateSort) return false;
+  const cd = new Date(c.dateSort+"T00:00:00");
+  const now = startOfDay(today());
+  if(when==="any" && !month) return true;
+  if(when==="today") return iso(cd)===iso(now);
+  if(when==="weekend"){
+    // upcoming Sat + Sun relative to today
+    const day = now.getDay(); // 0=Sun..6=Sat
+    const daysToSat = (6 - day + 7) % 7; // next Sat
+    const sat = addDays(now, daysToSat);
+    const sun = addDays(sat, 1);
+    return iso(cd)===iso(sat) || iso(cd)===iso(sun);
+  }
+  if(when==="nextweek"){
+    const day = now.getDay(); // 0=Sun..6=Sat
+    const daysToNextMon = ((1 - day + 7) % 7) || 7;
+    const mon = addDays(now, daysToNextMon);
+    const sun = addDays(mon, 6);
+    return cd >= startOfDay(mon) && cd <= addDays(sun,1);
+  }
+  if(when==="month"){
+    return cd.getFullYear()===now.getFullYear() && cd.getMonth()===now.getMonth();
+  }
+  if(month){ // "2026-05" etc
+    return c.dateSort.startsWith(month);
+  }
+  return true;
+}
+function genreMatches(c, genres){
+  if(!genres || genres.length===0) return true;
+  const tags = c.tags || [];
+  return genres.some(g => tags.includes(g));
+}
+function applyFilters(list){
+  let out = list.slice();
+  out = out.filter(c=>dateMatches(c, state.when, state.whenMonth));
+  out = out.filter(c=>genreMatches(c, state.genres));
+  if(state.recent){
+    const cutoff = addDays(startOfDay(today()), -21);
+    out = out.filter(c=>c.added && new Date(c.added+"T00:00:00") >= cutoff);
+    out.sort((a,b)=>(b.added||"").localeCompare(a.added||""));
+    return out;
+  }
+  // default sort: upcoming + festival first (earliest), then past (most recent)
+  const future = out.filter(c=>c.status!=="past").sort((a,b)=>a.dateSort.localeCompare(b.dateSort));
+  const past = out.filter(c=>c.status==="past").sort((a,b)=>b.dateSort.localeCompare(a.dateSort));
+  return [...future, ...past];
+}
+
+const WHEN_OPTS = [
+  ["any","Any Date"],
+  ["today","Today"],
+  ["weekend","This Weekend"],
+  ["nextweek","Next Week"],
+  ["month","This Month"]
+];
+
+function whenLabel(){
+  if(state.whenMonth){
+    const m = MONTHS_2026.find(x=>x[0]===state.whenMonth);
+    return m ? `${m[1]} 2026` : "Any Date";
+  }
+  const w = WHEN_OPTS.find(x=>x[0]===state.when);
+  return w ? w[1] : "Any Date";
+}
+function genreLabel(){
+  if(state.genres.length===0) return "All Genres";
+  if(state.genres.length===1){
+    const g = GENRES.find(x=>x.id===state.genres[0]);
+    return g ? g.label : "All Genres";
+  }
+  return `${state.genres.length} Genres`;
+}
+function moreLabel(){ return state.recent ? "Recently Added" : "Event Date"; }
+
+function renderFilters(){
+  // WHEN dropdown
+  const whenOpts = WHEN_OPTS.map(([id,label])=>{
+    const sel = (state.when===id && !state.whenMonth) ? "selected":"";
+    return `<button class="dd-opt ${sel}" data-when="${id}"><span>${label}</span></button>`;
+  }).join("");
+  const monthOpts = MONTHS_2026.map(([v,l])=>{
+    const sel = state.whenMonth===v ? "selected":"";
+    return `<button class="dd-opt ${sel}" data-month="${v}"><span>${l} 2026</span></button>`;
+  }).join("");
+  const whenHasValue = (state.when!=="any" || state.whenMonth) ? "has-value":"";
+
+  // GENRE dropdown (multi-select with checkboxes)
+  const allChecked = state.genres.length===0 ? "checked":"";
+  const genreCheckboxes = GENRES.filter(g=>g.id!=="all").map(g=>{
+    const checked = state.genres.includes(g.id) ? "checked":"";
+    const sel = checked ? "selected":"";
+    return `<label class="dd-opt ${sel}"><input type="checkbox" data-genre="${g.id}" ${checked}/><span>${g.label}</span></label>`;
+  }).join("");
+  const genreHasValue = state.genres.length>0 ? "has-value":"";
+  const genreBadge = state.genres.length>1 ? `<span class="dd-count">${state.genres.length}</span>` : "";
+
+  // MORE dropdown
+  const moreDefaultSel = !state.recent ? "selected":"";
+  const moreRecentSel = state.recent ? "selected":"";
+  const moreHasValue = state.recent ? "has-value":"";
+
+  return `
+    <section class="filters">
+      <div class="filter-row">
+        <div class="filter-field">
+          <div class="filter-label">When</div>
+          <div class="dropdown ${whenHasValue}" data-dd="when">
+            <button type="button" class="dd-button" data-dd-toggle>
+              <span class="dd-value">${whenLabel()}</span>
+            </button>
+            <div class="dd-panel" hidden>
+              <div class="dd-group">Quick</div>
+              ${whenOpts}
+              <div class="dd-group">2026 Months</div>
+              ${monthOpts}
+            </div>
+          </div>
+        </div>
+        <div class="filter-field">
+          <div class="filter-label">Music Style</div>
+          <div class="dropdown ${genreHasValue}" data-dd="genre">
+            <button type="button" class="dd-button" data-dd-toggle>
+              <span class="dd-value">${genreLabel()}</span>${genreBadge}
+            </button>
+            <div class="dd-panel" hidden>
+              <label class="dd-opt ${allChecked}"><input type="checkbox" data-genre="all" ${allChecked}/><span>All Genres</span></label>
+              <div class="dd-group">Genres</div>
+              ${genreCheckboxes}
+            </div>
+          </div>
+        </div>
+        <div class="filter-field">
+          <div class="filter-label">Sort</div>
+          <div class="dropdown ${moreHasValue}" data-dd="more">
+            <button type="button" class="dd-button" data-dd-toggle>
+              <span class="dd-value">${moreLabel()}</span>
+            </button>
+            <div class="dd-panel" hidden>
+              <button class="dd-opt ${moreDefaultSel}" data-more="default"><span>Event Date</span></button>
+              <button class="dd-opt ${moreRecentSel}" data-more="recent"><span>Recently Added</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+function renderConcerts(){
+  setActive("concerts");
+  const allUpcoming = CONCERTS.filter(c=>c.status!=="past").length;
+  const allPast = CONCERTS.filter(c=>c.status==="past").length;
+
+  const filtered = applyFilters(CONCERTS);
+  const hasFilters = state.when!=="any" || state.whenMonth || state.genres.length>0 || state.recent;
+
+  const cards = filtered.length
+    ? filtered.map(concertCard).join("")
+    : `<div class="empty-state" style="grid-column:1/-1">No shows match.<span class="small">Try widening the date range or clearing a filter.</span></div>`;
+
+  const clearLink = hasFilters ? `<a class="clear" data-clear>Clear filters</a>` : "";
+
+  app.innerHTML = `
+    <section class="page-head">
+      <h1>Concerts <span class="red">&amp; Festivals.</span></h1>
+      <div class="meta">
+        <b>${allUpcoming} upcoming</b>
+        ${allPast} archived<br>
+        Sourced · Eventpop
+      </div>
+    </section>
+    ${renderFilters()}
+    <div class="results-meta">${filtered.length} result${filtered.length===1?"":"s"}${clearLink}</div>
+    <div class="grid concerts">${cards}</div>
+  `;
+
+  // Dropdown open/close
+  const openDropdown = (name)=>{
+    app.querySelectorAll(".dropdown").forEach(d=>{
+      const panel = d.querySelector(".dd-panel");
+      if(d.dataset.dd===name){
+        d.classList.add("open");
+        if(panel) panel.hidden = false;
+      } else {
+        d.classList.remove("open");
+        if(panel) panel.hidden = true;
+      }
+    });
+  };
+  const closeAll = ()=>{
+    app.querySelectorAll(".dropdown").forEach(d=>{
+      d.classList.remove("open");
+      const panel = d.querySelector(".dd-panel");
+      if(panel) panel.hidden = true;
+    });
+  };
+  app.querySelectorAll(".dropdown").forEach(dd=>{
+    const btn = dd.querySelector("[data-dd-toggle]");
+    btn.addEventListener("click",(e)=>{
+      e.stopPropagation();
+      const isOpen = dd.classList.contains("open");
+      if(isOpen) closeAll();
+      else openDropdown(dd.dataset.dd);
+    });
+  });
+  // Stop clicks inside panels from bubbling to document close
+  app.querySelectorAll(".dd-panel").forEach(p=>p.addEventListener("click", e=>e.stopPropagation()));
+  // Global close-on-outside
+  if(!window.__ddCloseBound){
+    window.__ddCloseBound = true;
+    document.addEventListener("click",()=>{
+      document.querySelectorAll(".dropdown").forEach(d=>{
+        d.classList.remove("open");
+        const panel = d.querySelector(".dd-panel");
+        if(panel) panel.hidden = true;
+      });
+    });
+  }
+
+  // WHEN selection
+  app.querySelectorAll("[data-when]").forEach(el=>el.addEventListener("click",(e)=>{
+    e.stopPropagation();
+    state.when = el.dataset.when;
+    state.whenMonth = "";
+    renderConcerts();
+  }));
+  app.querySelectorAll("[data-month]").forEach(el=>el.addEventListener("click",(e)=>{
+    e.stopPropagation();
+    state.whenMonth = el.dataset.month;
+    state.when = "any";
+    renderConcerts();
+  }));
+
+  // GENRE multi-select via checkboxes
+  app.querySelectorAll("[data-genre]").forEach(el=>{
+    const handler = (e)=>{
+      e.stopPropagation();
+      const id = el.dataset.genre;
+      if(id==="all"){
+        state.genres = [];
+      } else {
+        const i = state.genres.indexOf(id);
+        if(i>=0) state.genres.splice(i,1); else state.genres.push(id);
+      }
+      renderConcerts();
+      // Re-open the genre dropdown so user can pick more
+      requestAnimationFrame(()=>openDropdown("genre"));
+    };
+    // Prevent label+checkbox double-fire: only listen on the label (which contains the checkbox)
+    if(el.tagName === "INPUT"){
+      el.addEventListener("change", handler);
+      el.addEventListener("click", e=>e.stopPropagation());
+    }
+  });
+  // Also handle clicks on the label container so clicking anywhere inside toggles
+  app.querySelectorAll(".dd-opt input[data-genre]").forEach(cb=>{
+    // Already handled above
+  });
+
+  // MORE selection
+  app.querySelectorAll("[data-more]").forEach(el=>el.addEventListener("click",(e)=>{
+    e.stopPropagation();
+    state.recent = el.dataset.more === "recent";
+    renderConcerts();
+  }));
+
+  // Clear filters
+  const clearBtn = app.querySelector("[data-clear]");
+  if(clearBtn) clearBtn.addEventListener("click",()=>{
+    state.when="any"; state.whenMonth=""; state.genres=[]; state.recent=false;
+    renderConcerts();
+  });
+
+  window.scrollTo({top:0,behavior:"instant"});
+}
+
+function concertCard(c){
+  const venueName = c.venueId ? VENUES[c.venueId]?.name : c.venueName;
+  return `
+    <a class="card" href="#/concert/${c.id}" aria-label="${escapeHtml(c.title)}">
+      <div class="bg" style="${bgCss(c.image, c.fallback)}"></div>
+      <div class="shade"></div>
+      <div class="topline">
+        <span class="tag">${escapeHtml(c.date)}</span>
+        ${c.tag ? `<span class="tag ${c.status==="past"?"":"red"}">${escapeHtml(c.tag)}</span>` : ""}
+      </div>
+      <span class="arrow">→</span>
+      <div class="body">
+        <h3>${escapeHtml(c.title)}</h3>
+        <div class="sub">
+          <span>${escapeHtml(venueName||"Venue TBA")}</span>
+          <span>${escapeHtml(c.genre)} · ${escapeHtml(c.price)}</span>
+        </div>
+      </div>
+    </a>`;
+}
+
+function renderVenues(){
+  setActive("venues");
+  const venues = Object.values(VENUES);
+  const cards = venues.map(v=>{
+    const upcoming = CONCERTS.filter(c=>c.venueId===v.id && c.status==="upcoming").length;
+    const past = CONCERTS.filter(c=>c.venueId===v.id && c.status==="past").length;
+    return `
+      <a class="card" href="#/venue/${v.id}" aria-label="${escapeHtml(v.name)}">
+        <div class="bg" style="${bgCss(v.image)}"></div>
+        <div class="shade"></div>
+        <div class="topline">
+          <span class="tag">${escapeHtml(v.type)}</span>
+          <span class="tag">${escapeHtml(v.area)}</span>
+        </div>
+        <span class="arrow">→</span>
+        <div class="body">
+          <h3>${escapeHtml(v.name)}</h3>
+          <div class="sub">
+            <span>${escapeHtml(v.city)}</span>
+            <span>${upcoming} upcoming · ${past} archived</span>
+          </div>
+        </div>
+      </a>`;
+  }).join("");
+
+  app.innerHTML = `
+    <section class="page-head">
+      <h1>Venues.</h1>
+      <div class="meta">
+        <b>${venues.length} rooms</b>
+        Bangkok metro<br>
+        Sourced · Eventpop
+      </div>
+    </section>
+    <div class="grid">${cards}</div>
+  `;
+  window.scrollTo({top:0,behavior:"instant"});
+}
+
+function renderArtists(){
+  setActive("artists");
+  const artists = Object.values(ARTISTS);
+  const cards = artists.map(a=>{
+    const count = CONCERTS.filter(c=>c.artists.includes(a.id)).length;
+    return `
+      <a class="card" href="#/artist/${a.id}" aria-label="${escapeHtml(a.name)}">
+        <div class="bg" style="${bgCss(a.image, a.fallback)}"></div>
+        <div class="shade"></div>
+        <div class="topline">
+          <span class="tag">${escapeHtml(a.role)}</span>
+          <span class="tag">${escapeHtml(a.country)}</span>
+        </div>
+        <span class="arrow">→</span>
+        <div class="body">
+          <h3>${escapeHtml(a.name)}</h3>
+          <div class="sub">
+            <span>${count} date${count===1?"":"s"} on file</span>
+          </div>
+        </div>
+      </a>`;
+  }).join("");
+
+  app.innerHTML = `
+    <section class="page-head">
+      <h1>Artists.</h1>
+      <div class="meta">
+        <b>${artists.length} artists tracked</b>
+        Linked to verified shows<br>
+        Sourced · Eventpop
+      </div>
+    </section>
+    <div class="grid">${cards}</div>
+  `;
+  window.scrollTo({top:0,behavior:"instant"});
+}
+
+function renderConcertDetail(id){
+  setActive("concerts");
+  const c = CONCERTS.find(x=>x.id===id);
+  if(!c){ location.hash="#/"; return; }
+  const venue = c.venueId ? VENUES[c.venueId] : null;
+  const venueName = venue?.name || c.venueName || "Venue TBA";
+  const relatedArtists = (c.artists||[]).map(aid=>ARTISTS[aid]).filter(Boolean);
+
+  app.innerHTML = `
+    <section class="detail">
+      <a class="back" href="#/">← All concerts</a>
+      <div class="hero">
+        <div class="bg" style="${bgCss(c.image, c.fallback)}"></div>
+        <div class="shade"></div>
+        <div class="hero-content">
+          <h1>${escapeHtml(c.title).replace(/—/g,'<span class="red">—</span>')}</h1>
+          <div class="tag-row">
+            <span>${escapeHtml(c.date)}</span>
+            <span>${escapeHtml(c.genre)}</span>
+            ${c.status==="upcoming"?'<span class="on">On sale</span>':""}
+            ${c.status==="past"?'<span>Archived</span>':""}
+            ${c.status==="festival"?'<span>Festival</span>':""}
+          </div>
+        </div>
+      </div>
+      <div class="body">
+        <div class="meta">
+          <div class="row"><b>Date</b>${escapeHtml(c.date)}</div>
+          <div class="row"><b>Venue</b>${venue ? `<a href="#/venue/${venue.id}">${escapeHtml(venueName)} →</a>` : escapeHtml(venueName)}</div>
+          <div class="row"><b>Genre</b>${escapeHtml(c.genre)}</div>
+          <div class="row"><b>Price</b>${escapeHtml(c.price)}</div>
+          ${relatedArtists.length ? `<div class="row"><b>Artists</b>${relatedArtists.map(a=>`<a href="#/artist/${a.id}">${escapeHtml(a.name)}</a>`).join(" · ")}</div>` : ""}
+          <div class="cta"><a href="${escapeHtml(c.link)}" target="_blank" rel="noopener">${escapeHtml(c.linkLabel)} →</a></div>
+        </div>
+        <div class="prose">
+          <h2>About this show.</h2>
+          <p>${escapeHtml(c.long||c.blurb)}</p>
+          ${venue ? `<p><b>Where.</b> ${escapeHtml(venue.blurb)}</p>` : ""}
+          <p><b>How we know.</b> This listing is pulled from Eventpop's public search and verified against the organiser's event page. Links open the original source.</p>
+        </div>
+      </div>
+    </section>
+  `;
+  window.scrollTo({top:0,behavior:"instant"});
+}
+
+function renderVenueDetail(id){
+  setActive("venues");
+  const v = VENUES[id];
+  if(!v){ location.hash="#/venues"; return; }
+  const upcoming = CONCERTS.filter(c=>c.venueId===v.id && c.status==="upcoming")
+    .sort((a,b)=>a.dateSort.localeCompare(b.dateSort));
+  const past = CONCERTS.filter(c=>c.venueId===v.id && c.status==="past")
+    .sort((a,b)=>b.dateSort.localeCompare(a.dateSort));
+
+  app.innerHTML = `
+    <section class="detail">
+      <a class="back" href="#/venues">← All venues</a>
+      <div class="hero">
+        <div class="bg" style="${bgCss(v.image)}"></div>
+        <div class="shade"></div>
+        <div class="hero-content">
+          <h1>${escapeHtml(v.name)}.</h1>
+          <div class="tag-row">
+            <span>${escapeHtml(v.type)}</span>
+            <span>${escapeHtml(v.city)}</span>
+            <span>Cap ${escapeHtml(v.cap)}</span>
+          </div>
+        </div>
+      </div>
+      <div class="body">
+        <div class="meta">
+          <div class="row"><b>Type</b>${escapeHtml(v.type)}</div>
+          <div class="row"><b>City</b>${escapeHtml(v.city)}</div>
+          <div class="row"><b>Capacity</b>${escapeHtml(v.cap)}</div>
+          <div class="row"><b>Area</b>${escapeHtml(v.area)}</div>
+          <div class="row"><b>Upcoming</b>${upcoming.length} shows</div>
+          <div class="row"><b>Archive</b>${past.length} shows</div>
+          <div class="cta"><a href="${escapeHtml(v.link)}" target="_blank" rel="noopener">${escapeHtml(v.linkLabel)} →</a></div>
+        </div>
+        <div class="prose">
+          <h2>About the room.</h2>
+          <p>${escapeHtml(v.long)}</p>
+        </div>
+      </div>
+      ${upcoming.length ? `<section class="related">
+        <h4>Upcoming at ${escapeHtml(v.name)}</h4>
+        <div class="grid" style="padding:0">${upcoming.map(concertCard).join("")}</div>
+      </section>` : ""}
+      ${past.length ? `<section class="related">
+        <h4>Past shows at ${escapeHtml(v.name)}</h4>
+        <div class="grid" style="padding:0">${past.map(concertCard).join("")}</div>
+      </section>` : ""}
+    </section>
+  `;
+  window.scrollTo({top:0,behavior:"instant"});
+}
+
+function renderArtistDetail(id){
+  setActive("artists");
+  const a = ARTISTS[id];
+  if(!a){ location.hash="#/artists"; return; }
+  const shows = CONCERTS.filter(c=>c.artists.includes(a.id))
+    .sort((x,y)=>y.dateSort.localeCompare(x.dateSort));
+
+  app.innerHTML = `
+    <section class="detail">
+      <a class="back" href="#/artists">← All artists</a>
+      <div class="hero">
+        <div class="bg" style="${bgCss(a.image, a.fallback)}"></div>
+        <div class="shade"></div>
+        <div class="hero-content">
+          <h1>${escapeHtml(a.name)}.</h1>
+          <div class="tag-row">
+            <span>${escapeHtml(a.role)}</span>
+            <span>${escapeHtml(a.country)}</span>
+            <span>${shows.length} date${shows.length===1?"":"s"}</span>
+          </div>
+        </div>
+      </div>
+      <div class="body">
+        <div class="meta">
+          <div class="row"><b>Role</b>${escapeHtml(a.role)}</div>
+          <div class="row"><b>Origin</b>${escapeHtml(a.country)}</div>
+          <div class="row"><b>Dates on file</b>${shows.length}</div>
+        </div>
+        <div class="prose">
+          <h2>About.</h2>
+          <p>${escapeHtml(a.long||a.blurb)}</p>
+        </div>
+      </div>
+      ${shows.length ? `<section class="related">
+        <h4>Shows by ${escapeHtml(a.name)}</h4>
+        <div class="grid" style="padding:0">${shows.map(concertCard).join("")}</div>
+      </section>` : ""}
+    </section>
+  `;
+  window.scrollTo({top:0,behavior:"instant"});
+}
+
+function router(){
+  const hash = (location.hash||"#/").replace(/^#/,"");
+  const parts = hash.split("/").filter(Boolean); // ["concert","id"]
+  if(parts.length===0){ renderConcerts(); return; }
+  const [kind, id] = parts;
+  if(kind==="venues") return renderVenues();
+  if(kind==="artists") return renderArtists();
+  if(kind==="concert" && id) return renderConcertDetail(id);
+  if(kind==="venue" && id) return renderVenueDetail(id);
+  if(kind==="artist" && id) return renderArtistDetail(id);
+  renderConcerts();
+}
+window.addEventListener("hashchange", router);
+router();
+</script>
+</body>
+</html>
