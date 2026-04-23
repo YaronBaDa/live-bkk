@@ -328,7 +328,8 @@
 <header class="bar">
   <a class="logo" href="#/">Live / BKK</a>
   <nav class="menu">
-    <a href="#/" data-view="concerts">Concerts &amp; Festivals</a>
+    <a href="#/" data-view="concerts">Concerts</a>
+    <a href="#/festivals" data-view="festivals">Festivals</a>
     <a href="#/venues" data-view="venues">Venues</a>
     <a href="#/artists" data-view="artists">Artists</a>
   </nav>
@@ -6857,6 +6858,14 @@ function setActive(view){
   });
 }
 
+/* A concert counts as a festival if it has the explicit `festival` status
+   OR if its title clearly says so. */
+function isFestival(c){
+  if(!c) return false;
+  if(c.status === "festival") return true;
+  return /\bfestival\b|\bfest\b/i.test(c.title || "");
+}
+
 /* ---------- FILTER STATE ---------- */
 const GENRES = [
   {id:"all", label:"All Genres"},
@@ -6877,7 +6886,62 @@ const MONTHS_2026 = [
   ["2026-07","July"],["2026-08","August"],["2026-09","September"],
   ["2026-10","October"],["2026-11","November"],["2026-12","December"]
 ];
-const state = { when:"any", whenMonth:"", genres:[], recent:false, q:"" };
+const state = { when:"any", whenMonth:"", genres:[], recent:false, q:"", countries:[] };
+
+/* ---------- ARTIST COUNTRY OVERRIDES ----------
+   Most TM/TTM/LNT entries don't have country in the data. This lookup
+   resolves a country code from the title or artistText. Curated entries
+   already carry it via ARTISTS[id].country. */
+const COUNTRY_LABELS = {
+  TH:"Thailand", US:"USA", UK:"UK", JP:"Japan", KR:"S. Korea",
+  TW:"Taiwan", CN:"China", HK:"Hong Kong", SG:"Singapore", MY:"Malaysia",
+  ID:"Indonesia", PH:"Philippines", VN:"Vietnam", IN:"India", AU:"Australia",
+  CA:"Canada", DE:"Germany", FR:"France", ES:"Spain", IT:"Italy",
+  SE:"Sweden", IE:"Ireland", NL:"Netherlands", MX:"Mexico", BR:"Brazil",
+  INT:"International", VAR:"Various"
+};
+const ARTIST_COUNTRY_OVERRIDES = [
+  // K-pop / K-hip-hop
+  { match: /\b(itzy|nmixx|blackpink|twice|aespa|riize|enhypen|txt|bts|seventeen|nct|stray kids|ateez|kiss of life|treasure|le sserafim|illit|ive|red velvet|bigbang|exo|got7|day6|monsta x|pentagon|ikon|winner|2ne1|epik high|zico|zach hsieh|tiger jk)\b/i, code:"KR" },
+  // T-pop / Thai artists
+  { match: /\b(bnk48|cgm48|bowkylion|the toys|polycat|tilly birds|scrubb|bodyslam|big ass|mild|three man down|fellow fellow|paper planes|ben chalatit|stamp|tattoo colour|whal\b|tea for joy|nont|musketeers|mendelssohn|blackhead|nuttherapy|youngohm|f\.hero|illslick|milli|liltan|asni|ramy|sek loso|carabao|loso|labanoon|blackdog|silly fools|sillyfools|getsunova|cocktail|lula|asanee|wasanee|aeb|christina|burin|pang nakarin|lipta|joey boy|tilly|klear|paradox|pause|jetset\'er|jetseter|kwong|magenta|bedroom audio|the parkinson|hugo|atom chanagun|the mousses|kanomroo|wednesday song|grasshopper|charas|maleewan|peacemaker|moveon|northstar|metalverse|gdh)\b/i, code:"TH" },
+  // J-pop / J-rock / Japanese
+  { match: /\b(king gnu|mika nakashima|yoasobi|babymetal|one ok rock|radwimps|ado|aimer|lisa|fujii kaze|joji|onlymonday|only monday|kaya|hizaki|dexcore|cnblue|dreamcatcher|rikimaru|jikei|kipuka|ocean jiang|surf java|sea keen|joong|dunk|force book|aylas|freehand|yukari okamura|bedouin)\b/i, code:"JP" },
+  // US hip-hop / pop / rock
+  { match: /\b(jid|j\.i\.d|tyler[, ]+the[, ]+creator|kendrick|drake|travis scott|future|playboi carti|young thug|21 savage|metro boomin|gunna|denzel curry|asap|a\$ap|frank ocean|sza|brent faiyaz|giveon|kehlani|jhene aiko|summer walker|the kid laroi|kid laroi|jenevieve|post malone|lany|laufey|david byrne|john mayer|kraftwerk|smino|bbno|phoebe bridgers|noah cyrus|olivia rodrigo|billie eilish|harry styles|taylor swift|beyonce|rihanna|bruno mars|john legend|ariana grande|the weeknd)\b/i, code:"US" },
+  // UK / Ireland
+  { match: /\b(kodaline|coldplay|the 1975|arctic monkeys|oasis|radiohead|muse|ed sheeran|sam smith|adele|stormzy|skepta|dave|aj tracey|dua lipa|the cure|pet shop boys|new order)\b/i, code:"UK" },
+  // Mainland Chinese / Taiwan
+  { match: /\b(jay chou|jolin tsai|jay park|crowd lu|mayday|sodagreen|hebe tien|amei|jolin|wang leehom|f4|stefanie sun|wang feng|jane zhang|winnie hsin|fish leong|five days)\b/i, code:"TW" },
+  // Indian
+  { match: /\b(vir das|ar rahman|arijit singh|shah rukh|aishwarya)\b/i, code:"IN" },
+  // German / Euro
+  { match: /\b(rammstein|tokio hotel|kraftwerk|tycho)\b/i, code:"DE" },
+];
+
+function resolveCountry(c){
+  // 1. Curated artists dict via c.artists[]
+  if (c && c.artists && c.artists.length){
+    for (const id of c.artists){
+      const a = ARTISTS[id];
+      if (a && a.country) return a.country.toUpperCase();
+    }
+  }
+  if (!c) return null;
+  // 2. Heuristic on title + artistText
+  const hay = ((c.title||"") + " " + (c.artistText||"")).toLowerCase();
+  for (const rule of ARTIST_COUNTRY_OVERRIDES){
+    if (rule.match.test(hay)) return rule.code;
+  }
+  // 3. Default: most events at Thai venues with Thai-language titles are Thai
+  if (/[\u0E00-\u0E7F]/.test(c.title||"")) return "TH";
+  return null;
+}
+
+function countryLabel(code){
+  if(!code) return null;
+  return COUNTRY_LABELS[code] || code;
+}
 
 /* ---------- ARTIST → GENRE OVERRIDES (re-tagged at boot) ----------
    Title-keyword regex in scrapers can't catch every artist (e.g. "J.I.D –
@@ -6986,10 +7050,17 @@ function searchMatches(c, q){
   return hay.includes(needle);
 }
 
+function countryMatches(c, codes){
+  if(!codes || codes.length===0) return true;
+  const cc = resolveCountry(c);
+  return cc ? codes.includes(cc) : codes.includes("UNKNOWN");
+}
+
 function applyFilters(list){
   let out = list.slice();
   out = out.filter(c=>dateMatches(c, state.when, state.whenMonth));
   out = out.filter(c=>genreMatches(c, state.genres));
+  out = out.filter(c=>countryMatches(c, state.countries));
   out = out.filter(c=>searchMatches(c, state.q));
   if(state.recent){
     const cutoff = addDays(startOfDay(today()), -21);
@@ -7028,6 +7099,11 @@ function genreLabel(){
   return `${state.genres.length} Genres`;
 }
 function moreLabel(){ return state.recent ? "Recently Added" : "Event Date"; }
+function countryDropdownLabel(){
+  if(state.countries.length===0) return "All Countries";
+  if(state.countries.length===1) return countryLabel(state.countries[0]) || state.countries[0];
+  return `${state.countries.length} Countries`;
+}
 
 function renderFilters(){
   // WHEN dropdown
@@ -7055,6 +7131,24 @@ function renderFilters(){
   const moreDefaultSel = !state.recent ? "selected":"";
   const moreRecentSel = state.recent ? "selected":"";
   const moreHasValue = state.recent ? "has-value":"";
+
+  // COUNTRY dropdown — only show countries that actually appear in data, ordered by frequency.
+  const countryCounts = {};
+  CONCERTS.forEach(c => {
+    const cc = resolveCountry(c) || "UNKNOWN";
+    countryCounts[cc] = (countryCounts[cc]||0) + 1;
+  });
+  const countryOpts = Object.entries(countryCounts)
+    .sort((a,b) => b[1]-a[1])
+    .map(([code,n]) => {
+      const checked = state.countries.includes(code) ? "checked":"";
+      const sel = checked ? "selected":"";
+      const label = code === "UNKNOWN" ? "Unknown" : (countryLabel(code) || code);
+      return `<label class="dd-opt ${sel}"><input type="checkbox" data-country="${code}" ${checked}/><span>${label} <span style="opacity:.45">(${n})</span></span></label>`;
+    }).join("");
+  const allCountryChecked = state.countries.length===0 ? "checked":"";
+  const countryHasValue = state.countries.length>0 ? "has-value":"";
+  const countryBadge = state.countries.length>1 ? `<span class="dd-count">${state.countries.length}</span>` : "";
 
   const qHasValue = state.q ? "has-value" : "";
   const qVal = (state.q || "").replace(/"/g,"&quot;");
@@ -7094,6 +7188,19 @@ function renderFilters(){
           </div>
         </div>
         <div class="filter-field">
+          <div class="filter-label">Country</div>
+          <div class="dropdown ${countryHasValue}" data-dd="country">
+            <button type="button" class="dd-button" data-dd-toggle>
+              <span class="dd-value">${countryDropdownLabel()}</span>${countryBadge}
+            </button>
+            <div class="dd-panel" hidden>
+              <label class="dd-opt ${allCountryChecked}"><input type="checkbox" data-country="all" ${allCountryChecked}/><span>All Countries</span></label>
+              <div class="dd-group">By origin</div>
+              ${countryOpts}
+            </div>
+          </div>
+        </div>
+        <div class="filter-field">
           <div class="filter-label">Sort</div>
           <div class="dropdown ${moreHasValue}" data-dd="more">
             <button type="button" class="dd-button" data-dd-toggle>
@@ -7112,11 +7219,13 @@ function renderFilters(){
 
 function renderConcerts(){
   setActive("concerts");
-  const allUpcoming = CONCERTS.filter(c=>c.status!=="past").length;
-  const allPast = CONCERTS.filter(c=>c.status==="past").length;
+  // Concerts tab excludes festivals.
+  const pool = CONCERTS.filter(c => !isFestival(c));
+  const allUpcoming = pool.filter(c=>c.status!=="past").length;
+  const allPast = pool.filter(c=>c.status==="past").length;
 
-  const filtered = applyFilters(CONCERTS);
-  const hasFilters = state.when!=="any" || state.whenMonth || state.genres.length>0 || state.recent;
+  const filtered = applyFilters(pool);
+  const hasFilters = state.when!=="any" || state.whenMonth || state.genres.length>0 || state.recent || state.q || state.countries.length>0;
 
   const cards = filtered.length
     ? filtered.map(concertCard).join("")
@@ -7126,11 +7235,11 @@ function renderConcerts(){
 
   app.innerHTML = `
     <section class="page-head">
-      <h1>Concerts <span class="red">&amp; Festivals.</span></h1>
+      <h1>Concerts.</h1>
       <div class="meta">
         <b>${allUpcoming} upcoming</b>
         ${allPast} archived<br>
-        Sourced · Eventpop
+        Sourced · Ticketmelon · Thai Ticket Major
       </div>
     </section>
     ${renderFilters()}
@@ -7138,16 +7247,20 @@ function renderConcerts(){
     <div class="grid concerts">${cards}</div>
   `;
 
-  // Dropdown open/close
+  wireFilterRow(renderConcerts);
+  window.scrollTo({top:0,behavior:"instant"});
+}
+
+/* Wire up the filter dropdowns + search box. Used by both renderConcerts
+   and renderFestivals — the rerender callback decides which page repaints. */
+function wireFilterRow(rerender){
   const openDropdown = (name)=>{
     app.querySelectorAll(".dropdown").forEach(d=>{
       const panel = d.querySelector(".dd-panel");
       if(d.dataset.dd===name){
-        d.classList.add("open");
-        if(panel) panel.hidden = false;
+        d.classList.add("open"); if(panel) panel.hidden = false;
       } else {
-        d.classList.remove("open");
-        if(panel) panel.hidden = true;
+        d.classList.remove("open"); if(panel) panel.hidden = true;
       }
     });
   };
@@ -7167,9 +7280,7 @@ function renderConcerts(){
       else openDropdown(dd.dataset.dd);
     });
   });
-  // Stop clicks inside panels from bubbling to document close
   app.querySelectorAll(".dd-panel").forEach(p=>p.addEventListener("click", e=>e.stopPropagation()));
-  // Global close-on-outside
   if(!window.__ddCloseBound){
     window.__ddCloseBound = true;
     document.addEventListener("click",()=>{
@@ -7181,54 +7292,55 @@ function renderConcerts(){
     });
   }
 
-  // WHEN selection
   app.querySelectorAll("[data-when]").forEach(el=>el.addEventListener("click",(e)=>{
     e.stopPropagation();
-    state.when = el.dataset.when;
-    state.whenMonth = "";
-    renderConcerts();
+    state.when = el.dataset.when; state.whenMonth = ""; rerender();
   }));
   app.querySelectorAll("[data-month]").forEach(el=>el.addEventListener("click",(e)=>{
     e.stopPropagation();
-    state.whenMonth = el.dataset.month;
-    state.when = "any";
-    renderConcerts();
+    state.whenMonth = el.dataset.month; state.when = "any"; rerender();
   }));
 
-  // GENRE multi-select via checkboxes
   app.querySelectorAll("[data-genre]").forEach(el=>{
     const handler = (e)=>{
       e.stopPropagation();
       const id = el.dataset.genre;
-      if(id==="all"){
-        state.genres = [];
-      } else {
+      if(id==="all"){ state.genres = []; }
+      else {
         const i = state.genres.indexOf(id);
         if(i>=0) state.genres.splice(i,1); else state.genres.push(id);
       }
-      renderConcerts();
-      // Re-open the genre dropdown so user can pick more
+      rerender();
       requestAnimationFrame(()=>openDropdown("genre"));
     };
-    // Prevent label+checkbox double-fire: only listen on the label (which contains the checkbox)
     if(el.tagName === "INPUT"){
       el.addEventListener("change", handler);
       el.addEventListener("click", e=>e.stopPropagation());
     }
   });
-  // Also handle clicks on the label container so clicking anywhere inside toggles
-  app.querySelectorAll(".dd-opt input[data-genre]").forEach(cb=>{
-    // Already handled above
-  });
 
-  // MORE selection
   app.querySelectorAll("[data-more]").forEach(el=>el.addEventListener("click",(e)=>{
     e.stopPropagation();
-    state.recent = el.dataset.more === "recent";
-    renderConcerts();
+    state.recent = el.dataset.more === "recent"; rerender();
   }));
 
-  // SEARCH input — debounced re-render so we keep focus + cursor position.
+  app.querySelectorAll("[data-country]").forEach(el=>{
+    if(el.tagName !== "INPUT") return;
+    const handler = (e)=>{
+      e.stopPropagation();
+      const code = el.dataset.country;
+      if(code==="all"){ state.countries = []; }
+      else {
+        const i = state.countries.indexOf(code);
+        if(i>=0) state.countries.splice(i,1); else state.countries.push(code);
+      }
+      rerender();
+      requestAnimationFrame(()=>openDropdown("country"));
+    };
+    el.addEventListener("change", handler);
+    el.addEventListener("click", e=>e.stopPropagation());
+  });
+
   const searchInput = app.querySelector("[data-search]");
   if(searchInput){
     searchInput.addEventListener("click", e=>e.stopPropagation());
@@ -7239,21 +7351,54 @@ function renderConcerts(){
       t = setTimeout(()=>{
         state.q = v;
         const cur = e.target.selectionStart;
-        renderConcerts();
-        // Restore focus + cursor after re-render
+        rerender();
         const again = app.querySelector("[data-search]");
         if(again){ again.focus(); try { again.setSelectionRange(cur, cur); } catch(_){} }
       }, 120);
     });
   }
 
-  // Clear filters
   const clearBtn = app.querySelector("[data-clear]");
   if(clearBtn) clearBtn.addEventListener("click",()=>{
-    state.when="any"; state.whenMonth=""; state.genres=[]; state.recent=false; state.q="";
-    renderConcerts();
+    state.when="any"; state.whenMonth=""; state.genres=[]; state.recent=false; state.q=""; state.countries=[];
+    rerender();
   });
+}
 
+function renderFestivals(){
+  setActive("festivals");
+  // Festivals tab: only entries that look like a festival.
+  const pool = CONCERTS.filter(isFestival);
+  const allUpcoming = pool.filter(c=>c.status!=="past").length;
+  const allPast = pool.filter(c=>c.status==="past").length;
+
+  const filtered = applyFilters(pool);
+  const hasFilters = state.when!=="any" || state.whenMonth || state.genres.length>0 || state.recent || state.q || state.countries.length>0;
+
+  const cards = filtered.length
+    ? filtered.map(concertCard).join("")
+    : `<div class="empty-state" style="grid-column:1/-1">No festivals match.<span class="small">Try widening the date range or clearing a filter.</span></div>`;
+
+  const clearLink = hasFilters ? `<a class="clear" data-clear>Clear filters</a>` : "";
+
+  app.innerHTML = `
+    <section class="page-head">
+      <h1>Festivals.</h1>
+      <div class="meta">
+        <b>${allUpcoming} upcoming</b>
+        ${allPast} archived<br>
+        Multi-day · Multi-stage
+      </div>
+    </section>
+    ${renderFilters()}
+    <div class="results-meta">${filtered.length} result${filtered.length===1?"":"s"}${clearLink}</div>
+    <div class="grid concerts">${cards}</div>
+  `;
+
+  // Wire up the same dropdown + filter handlers that renderConcerts uses.
+  // Easiest: re-call the wiring code path by simulating renderConcerts's tail.
+  // We replicate the wiring inline since both pages share the filter row.
+  wireFilterRow(renderFestivals);
   window.scrollTo({top:0,behavior:"instant"});
 }
 
@@ -7282,6 +7427,9 @@ function concertCard(c){
   }
   // Date + time chip
   const dateLabel = c.time ? `${c.date} · ${c.time}` : c.date;
+  // Country chip
+  const cc = resolveCountry(c);
+  const ccChip = cc ? `<span class="tag solid">${escapeHtml(countryLabel(cc))}</span>` : "";
   return `
     <a class="card" href="#/concert/${c.id}" aria-label="${escapeHtml(c.title)}">
       <div class="bg" style="${bgCss(c.image, c.fallback)}"></div>
@@ -7289,6 +7437,7 @@ function concertCard(c){
       <div class="topline">
         <span class="tag solid">${escapeHtml(dateLabel)}</span>
         ${genreChip}
+        ${ccChip}
         ${c.tag ? `<span class="tag ${c.status==="past"?"":"red"}">${escapeHtml(c.tag)}</span>` : ""}
       </div>
       <span class="arrow">→</span>
@@ -7541,6 +7690,7 @@ function router(){
   const parts = hash.split("/").filter(Boolean); // ["concert","id"]
   if(parts.length===0){ renderConcerts(); return; }
   const [kind, id] = parts;
+  if(kind==="festivals") return renderFestivals();
   if(kind==="venues") return renderVenues();
   if(kind==="artists") return renderArtists();
   if(kind==="concert" && id) return renderConcertDetail(id);
