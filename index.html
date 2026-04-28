@@ -7174,9 +7174,12 @@ function applyFilters(list){
   out = out.filter(c=>genreMatches(c, state.genres));
   out = out.filter(c=>searchMatches(c, state.q));
   if(state.recent){
-    const cutoff = addDays(startOfDay(today()), -21);
-    out = out.filter(c=>c.added && new Date(c.added+"T00:00:00") >= cutoff);
-    out.sort((a,b)=>(b.added||"").localeCompare(a.added||""));
+    // Sort by added date descending, then by event date as tie-breaker
+    out.sort((a,b)=>{
+      const byAdded = (b.added||"").localeCompare(a.added||"");
+      if(byAdded !== 0) return byAdded;
+      return (b.dateSort||"").localeCompare(a.dateSort||"");
+    });
     return out;
   }
   // default sort: upcoming + festival first (earliest), then past (most recent)
