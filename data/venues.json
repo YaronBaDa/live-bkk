@@ -1,0 +1,93 @@
+{
+  "mrfox": {
+    "id": "mrfox",
+    "name": "Mr.FOX Live House",
+    "city": "Bangkok",
+    "type": "Livehouse",
+    "cap": "~350",
+    "area": "Bangkok",
+    "image": "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=1600&q=80",
+    "blurb": "Dedicated rock, J-rock and V-kei livehouse in central Bangkok. Home of the annual BangkokBeasts showcase.",
+    "long": "Mr.FOX Live House is the Bangkok venue-of-record for imported J-rock, visual-kei and local heavy indie. Over the last two years it has hosted DEXCORE, SKEGSS, HIZAKI × Kaya, Jupiter and its own recurring flagship — BangkokBeasts. The next edition lands in November 2026.",
+    "link": "https://www.eventpop.me/search?q=mr.fox&sort_by=by_sooner",
+    "linkLabel": "Listings on Eventpop"
+  },
+  "marshall": {
+    "id": "marshall",
+    "name": "Marshall Livehouse",
+    "city": "Bangkok",
+    "type": "Livehouse",
+    "cap": "~500",
+    "area": "Bangkok",
+    "image": "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=1600&q=80",
+    "blurb": "Mid-size rock room hosting Thai indie tours and regional bills.",
+    "long": "Marshall Livehouse is a mid-capacity rock room regularly hosting Thai indie tours and regional bills. Bitter Sweet plays there on 9 May 2026.",
+    "link": "https://www.eventpop.me/search?q=marshall+livehouse&sort_by=by_sooner",
+    "linkLabel": "Listings on Eventpop"
+  },
+  "princemahidol": {
+    "id": "princemahidol",
+    "name": "Prince Mahidol Hall",
+    "city": "Salaya, Nakhon Pathom",
+    "type": "Concert hall",
+    "cap": "~2,000",
+    "area": "Mahidol University campus",
+    "image": "https://images.unsplash.com/photo-1465847899084-d164df4dedc6?auto=format&fit=crop&w=1600&q=80",
+    "blurb": "Mahidol University's formal concert hall. Orchestral and recital programming.",
+    "long": "Prince Mahidol Hall is Mahidol University's formal 2,000-seat concert hall in Salaya. It hosts classical recitals, touring orchestras and live-to-picture film scores. Upcoming: How To Train Your Dragon In Concert (16 May 2026) and Ray Chen's violin recital (7 Jun 2026).",
+    "link": "https://www.eventpop.me/search?q=prince+mahidol&sort_by=by_sooner",
+    "linkLabel": "Listings on Eventpop"
+  },
+  "tcc": {
+    "id": "tcc",
+    "name": "Thailand Cultural Centre",
+    "city": "Huai Khwang, Bangkok",
+    "type": "Concert hall",
+    "cap": "~2,000 (Main Hall)",
+    "area": "Ratchadapisek",
+    "image": "https://images.unsplash.com/photo-1511192336575-5a79af67a629?auto=format&fit=crop&w=1600&q=80",
+    "blurb": "The state's primary hall for symphonic, film score and touring productions.",
+    "long": "The Thailand Cultural Centre (TCC) is the state hall of record for symphonic music, live-to-picture shows and large-scale touring productions. Upcoming: Music of Square Enix (18 Jul 2026).",
+    "link": "https://www.eventpop.me/search?q=thailand+cultural+centre&sort_by=by_sooner",
+    "linkLabel": "Listings on Eventpop"
+  },
+  "lido": {
+    "id": "lido",
+    "name": "Lido Connect",
+    "city": "Siam Square, Bangkok",
+    "type": "Livehouse",
+    "cap": "~700",
+    "area": "Siam Square",
+    "image": "https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=1600&q=80",
+    "blurb": "Repurposed art-house cinema. Indie pop, singer-songwriter, one-off tours.",
+    "long": "Lido Connect is a repurposed art-house cinema in Siam Square converted into a tiered live stage. It programs indie pop, singer-songwriter sets and one-off touring shows across three screens.",
+    "link": "https://www.eventpop.me/search?q=lido+connect&sort_by=by_sooner",
+    "linkLabel": "Listings on Eventpop"
+  },
+  "impact": {
+    "id": "impact",
+    "name": "Impact Arena",
+    "city": "Muang Thong Thani",
+    "type": "Arena",
+    "cap": "~12,000",
+    "area": "Nonthaburi",
+    "image": "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&w=1600&q=80",
+    "blurb": "Thailand's arena of record. International tours and stadium pop.",
+    "long": "Impact Arena is Thailand's arena of record — the standard venue for international stadium tours, major Thai pop tours, and K-pop dates. Located in Muang Thong Thani, Nonthaburi.",
+    "link": "https://www.eventpop.me/search?q=impact+arena&sort_by=by_sooner",
+    "linkLabel": "Listings on Eventpop"
+  },
+  "worldsiam": {
+    "id": "worldsiam",
+    "name": "World Siam Stadium",
+    "city": "Bangkok",
+    "type": "Multi-use",
+    "cap": "Varies",
+    "area": "Bangkok",
+    "image": "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1600&q=80",
+    "blurb": "Combat sports and concerts under one roof. Mixed programming.",
+    "long": "World Siam Stadium is a mixed-use Bangkok venue hosting Muay Thai, combat sports events and periodic live concerts.",
+    "link": "https://www.eventpop.me/search?q=world+siam+stadium&sort_by=by_sooner",
+    "linkLabel": "Listings on Eventpop"
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "bangkokbeasts": {
+    "id": "bangkokbeasts",
+    "name": "BangkokBeasts",
+    "role": "Rock showcase",
+    "image": "https://p-u.popcdn.net/event_details/posters/000/118/637/medium/51465b96b36adbbe3a20124c8e6e194e62945e65.jpeg",
+    "fallback": "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=1600&q=80",
+    "country": "Thailand",
+    "blurb": "Annual Bangkok rock showcase. Fifth edition — Furbidden Vault — lands 14 Nov 2026 at Mr.FOX.",
+    "long": "BangkokBeasts is the annual multi-band rock showcase hosted at Mr.FOX Live House. Previous editions (2025: The Furtune Teller) have sold out the room. The 2026 edition, Furbidden Vault, is scheduled for Saturday, 14 November 2026.",
+    "concerts": [
+      "bangkokbeasts-2026"
+    ]
+  },
+  "bittersweet": {
+    "id": "bittersweet",
+    "name": "Bitter Sweet",
+    "role": "Indie pop",
+    "image": "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&w=1600&q=80",
+    "country": "Thailand",
+    "blurb": "Long-running Thai indie-pop act on tour.",
+    "long": "Bitter Sweet is a long-running Thai indie-pop band with a dedicated following across Southeast Asia. Their 2026 Bangkok date is 9 May at Marshall Livehouse.",
+    "concerts": [
+      "bittersweet-2026"
+    ]
+  },
+  "raychen": {
+    "id": "raychen",
+    "name": "Ray Chen",
+    "role": "Violinist",
+    "image": "https://images.unsplash.com/photo-1465821185615-20b3c2fbf41b?auto=format&fit=crop&w=1600&q=80",
+    "country": "International",
+    "blurb": "Award-winning Taiwanese-Australian violinist on a recital tour.",
+    "long": "Ray Chen is an internationally acclaimed violinist whose recital tours routinely sell out major halls. His Bangkok date is Sunday, 7 June 2026 at Prince Mahidol Hall, Salaya.",
+    "concerts": [
+      "raychen-2026"
+    ]
+  },
+  "httyd": {
+    "id": "httyd",
+    "name": "How To Train Your Dragon — In Concert",
+    "role": "Live-to-picture film score",
+    "image": "https://images.unsplash.com/photo-1465847899084-d164df4dedc6?auto=format&fit=crop&w=1600&q=80",
+    "country": "International touring production",
+    "blurb": "John Powell's score performed live to the full feature film.",
+    "long": "The touring live-to-picture production of How To Train Your Dragon pairs the full feature film with John Powell's score performed live by a full orchestra. Bangkok date: 16 May 2026 at Prince Mahidol Hall.",
+    "concerts": [
+      "httyd-2026"
+    ]
+  },
+  "squareenix": {
+    "id": "squareenix",
+    "name": "Music of Square Enix",
+    "role": "Video-game score concert",
+    "image": "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=1600&q=80",
+    "country": "International touring production",
+    "blurb": "Symphonic performance of Square Enix's best-known game scores.",
+    "long": "Music of Square Enix is a touring symphonic programme featuring the publisher's most recognisable game scores, including Final Fantasy and Kingdom Hearts selections. Bangkok: 18 July 2026 at TCC.",
+    "concerts": [
+      "squareenix-2026"
+    ]
+  },
+  "dexcore": {
+    "id": "dexcore",
+    "name": "DEXCORE",
+    "role": "J-rock",
+    "image": "https://p-u.popcdn.net/event_details/posters/000/037/285/medium/e5be3d3b21e0eb620f543632208536ff9edcc465.jpg",
+    "fallback": "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=1600&q=80",
+    "country": "Japan",
+    "blurb": "Tokyo-based J-rock band. Played Mr.FOX in 2024.",
+    "long": "DEXCORE is a Tokyo-based J-rock band. Their Bangkok date at Mr.FOX Live House was Saturday, 3 August 2024.",
+    "concerts": [
+      "dexcore-2024"
+    ]
+  },
+  "jupiter": {
+    "id": "jupiter",
+    "name": "Jupiter",
+    "role": "Visual-kei",
+    "image": "https://p-u.popcdn.net/event_details/posters/000/087/536/medium/f785bf0618cbd9248a03d5db53a80288e061cc58.jpg",
+    "fallback": "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=1600&q=80",
+    "country": "Japan",
+    "blurb": "Symphonic visual-kei band. Played Mr.FOX in 2025.",
+    "long": "Jupiter is a Japanese symphonic visual-kei band. Their Bangkok date at Mr.FOX Live House was Saturday, 2 August 2025.",
+    "concerts": [
+      "jupiter-2025"
+    ]
+  },
+  "hizaki": {
+    "id": "hizaki",
+    "name": "HIZAKI × Kaya",
+    "role": "Visual-kei",
+    "image": "https://p-u.popcdn.net/event_details/posters/000/049/231/medium/4750d7b50914a3f6f594acf84912a0fe1b086fdb.jpg",
+    "fallback": "https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=1600&q=80",
+    "country": "Japan",
+    "blurb": "Grace Addict — a visual-kei collaboration.",
+    "long": "HIZAKI × Kaya — Grace Addict — performed at Mr.FOX Live House on 30 November 2024 as part of their Bangkok date.",
+    "concerts": [
+      "hizaki-2024"
+    ]
+  }
+}
