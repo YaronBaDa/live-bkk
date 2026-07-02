@@ -396,10 +396,12 @@ let CONCERTS = [];
 
 async function loadData(){
   try {
+    // Daily cache-bust so users get fresh data after pipeline runs
+    const cacheBust = '?v=' + new Date().toISOString().slice(0,10);
     const [cRes, vRes, aRes] = await Promise.all([
-      fetch('data/concerts.json'),
-      fetch('data/venues.json'),
-      fetch('data/artists.json')
+      fetch('data/concerts.json' + cacheBust),
+      fetch('data/venues.json' + cacheBust),
+      fetch('data/artists.json' + cacheBust)
     ]);
     CONCERTS = await cRes.json();
     VENUES = await vRes.json();

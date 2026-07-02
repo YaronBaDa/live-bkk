@@ -1,48 +1,83 @@
 # Live / BKK
 
-A single-file static directory of upcoming live music and festivals in Bangkok.
+A directory of upcoming live music and festivals in Bangkok.
 
-The whole site is one self-contained `index.html` — no build step, no external data files. Open it in a browser locally, or host it via GitHub Pages (see below).
+**Live site:** [yaronbada.github.io/live-bkk](https://yaronbada.github.io/live-bkk)
 
-## Layout
+## Architecture
 
-- `index.html` — the entire site: HTML, CSS, JS, and the embedded `CONCERTS`, `VENUES`, and `ARTISTS` arrays.
-- `.github/workflows/pages.yml` — GitHub Actions workflow that publishes the site to GitHub Pages on every push to `main`.
-
-## Refreshing listings
-
-The scraper + merger pipeline lives in the Cowork outputs folder (not in this repo). To run it manually:
-
-```bash
-python3 update.py            # scrape every source in parallel + merge into index.html
-python3 update.py --dry-run  # scrape + merge but don't overwrite the file
-python3 update.py --no-fetch # skip scrapers, just re-merge cached *_events.json
+```
+index.html          → Single-page app (fetches JSON data)
+data/
+  concerts.json     → Merged, deduplicated concert listings
+  venues.json       → Venue profiles
+  artists.json      → Artist profiles
+  health.json       → Pipeline health report
+scripts/
+  scrape_ticketmelon.py
+  scrape_ttm.py
+  scrape_eventpop.py
+  scrape_allevents.py
+  scrape_lnt.py
+  merge.py
+  run_pipeline.py
+.github/workflows/
+  daily-scrape.yml  → Automated daily scraping + deployment
 ```
 
-Each run:
+## Data Sources
 
-1. Pulls events from Ticketmelon (`api-frontend.ticketmelon.com/v1/buyer/home-page/events`), Thai Ticket Major (HTML listing), and Live Nation Tero (homepage + per-event og: meta).
-2. Merges into `CONCERTS` — preserving `added` dates and curated entries, flipping past events to `status: "past"`, deduping by `id` and by normalised title+date across sources.
-3. Writes the file back, touching nothing outside the `CONCERTS` array.
-4. Commits locally. **Push is manual** — run `git push` (or use GitHub Desktop) to publish.
+| Source | Method | Coverage |
+|--------|--------|----------|
+| **Ticketmelon** | Sitemap + `__NEXT_DATA__` | ~500 Bangkok events |
+| **Thai Ticket Major** | Public feed + detail pages | ~100 events |
+| **Eventpop** | Search + OG metadata | ~30 events |
+| **Live Nation Tero** | Playwright (homepage) | ~15 events |
+| **AllEvents.in** | RSS feed | ~15 events |
 
-## Hosting on GitHub Pages
+## Automation
 
-The repo is **public** so Pages hosting is free.
+The site is automatically updated every day at **6:00 AM Bangkok time** via GitHub Actions:
 
-1. **Settings → Pages → Source:** choose "GitHub Actions".
-2. The included `.github/workflows/pages.yml` workflow does the rest — it deploys `index.html` (and any other static files) to Pages on every push to `main`.
-3. Your site URL will be `https://<your-username>.github.io/live-bkk/`.
+1. All scrapers run in parallel
+2. Data is merged, deduplicated, and filtered
+3. `index.html` footer timestamp is updated
+4. Changes are committed and pushed to `main`
+5. GitHub Pages redeploys automatically
 
-If you'd rather skip the workflow, you can also pick **Deploy from a branch → `main` → `/ (root)`** in the Pages settings.
+You can also trigger a manual run from **Actions → Daily Scrape & Deploy → Run workflow**.
 
-## Local preview
+## Local Development
 
 ```bash
-cd ~/Documents/LiveBKK
+# Clone
+git clone https://github.com/YaronBaDa/live-bkk.git
+cd live-bkk
+
+# Install deps
+pip install requests beautifulsoup4 playwright
+playwright install chromium
+
+# Run pipeline manually
+python3 scripts/run_pipeline.py
+
+# Serve locally
 python3 -m http.server 8080
-# then open http://localhost:8080
+# open http://localhost:8080
 ```
+
+## Pipeline Details
+
+### Deduplication
+Events are matched by canonical fingerprint: `normalize_title + date + venue`. Same show on multiple sources appears once.
+
+### Filtering
+- Non-music events are filtered out (workshops, sports, marathons, etc.)
+- Events before 2024 are dropped
+- Year errors (e.g., 2126) are auto-corrected
+
+### Cache Busting
+The frontend appends `?v=YYYY-MM-DD` to JSON fetch URLs, so users get fresh data daily without hard reloads.
 
 ## License
 

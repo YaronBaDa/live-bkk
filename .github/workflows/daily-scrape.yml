@@ -1,0 +1,86 @@
+name: Daily Scrape & Deploy
+
+on:
+  schedule:
+    - cron: '0 23 * * *'  # 6:00 AM Bangkok time (UTC+7)
+  workflow_dispatch:        # Allow manual trigger
+  push:
+    branches: [main]        # Deploy on every push to main
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Python dependencies
+        run: |
+          pip install requests beautifulsoup4 playwright
+
+      - name: Install Playwright browsers & system deps
+        run: |
+          playwright install chromium
+          sudo playwright install-deps chromium
+        continue-on-error: true
+
+      - name: Run scraping pipeline
+        run: |
+          python3 scripts/run_pipeline.py
+
+      - name: Update footer timestamp
+        run: |
+          TODAY=$(date +'%d %b %Y')
+          COUNT=$(python3 -c "import json; print(len(json.load(open('data/concerts.json'))))")
+          sed -i "s/Last updated · .*/Last updated · ${TODAY} · ${COUNT} shows tracked<\/span>/" index.html
+
+      - name: Commit & push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/ index.html
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Daily scrape: $(date +%Y-%m-%d) — $(python3 -c 'import json; print(len(json.load(open("data/concerts.json"))))' ) concerts"
+            git push
+          fi
+
+  deploy:
+    needs: scrape
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
