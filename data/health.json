@@ -1,0 +1,28 @@
+{
+  "runAt": "2026-07-02T19:00:18.594260",
+  "sources": {
+    "ticketmelon": {
+      "status": "ok",
+      "events": 492
+    },
+    "thaiticketmajor": {
+      "status": "ok",
+      "events": 105
+    },
+    "eventpop": {
+      "status": "ok",
+      "events": 31
+    },
+    "livenationtero": {
+      "status": "ok",
+      "events": 13
+    },
+    "allevents": {
+      "status": "ok",
+      "events": 13
+    }
+  },
+  "totalConcerts": 658,
+  "withDates": 269,
+  "withImages": 259
+}
