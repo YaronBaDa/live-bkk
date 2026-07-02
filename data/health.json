@@ -1,28 +1,28 @@
 {
-  "runAt": "2026-07-02T19:00:18.594260",
+  "runAt": "2026-07-02T19:16:47.900266",
   "sources": {
-    "ticketmelon": {
-      "status": "ok",
-      "events": 492
+    "scripts/scrape_lnt.py": {
+      "status": "error",
+      "error": "Traceback (most recent call last):\n  File \"/home/runner/work/live-bkk/live-bkk/scripts/scrape_lnt.py\", line 105, in <module>\n    sys.exit(run())\n             ^^^^^\n  File \"/home/runner/work/live-bkk/l"
     },
-    "thaiticketmajor": {
+    "scripts/scrape_ttm.py": {
       "status": "ok",
-      "events": 105
+      "events": 61
     },
-    "eventpop": {
+    "scripts/scrape_ticketmelon.py": {
       "status": "ok",
-      "events": 31
+      "events": 383
     },
-    "livenationtero": {
+    "scripts/scrape_eventpop.py": {
       "status": "ok",
-      "events": 13
+      "events": 41
     },
-    "allevents": {
+    "scripts/scrape_allevents.py": {
       "status": "ok",
-      "events": 13
+      "events": 16
+    },
+    "merge": {
+      "status": "ok"
     }
-  },
-  "totalConcerts": 658,
-  "withDates": 269,
-  "withImages": 259
+  }
 }
