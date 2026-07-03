@@ -1,6 +1,6 @@
 {
   "source": "eventpop",
-  "count": 41,
+  "count": 30,
   "events": [
     {
       "source": "eventpop",
@@ -16,7 +16,7 @@
       "genre": "Concert",
       "price": "",
       "image": "https://p-u.popcdn.net/event_details/covers/000/131/424/og_cover/48d00eb4cfa563a1c772fc9387b3094208712c1a.jpg?1774537926",
-      "scrapedAt": "2026-07-02T19:15:19.129236"
+      "scrapedAt": "2026-07-03T00:10:05.985081"
     },
     {
       "source": "eventpop",
@@ -32,7 +32,7 @@
       "genre": "Concert",
       "price": "",
       "image": "/images/cover-placeholder.jpg",
-      "scrapedAt": "2026-07-02T19:15:20.287301"
+      "scrapedAt": "2026-07-03T00:10:07.035320"
     },
     {
       "source": "eventpop",
@@ -48,7 +48,7 @@
       "genre": "Concert",
       "price": "1,200 THB",
       "image": "https://p-u.popcdn.net/event_details/covers/000/008/088/og_cover/2d9acb6c0adb525ea6bf9ecb0f9ccff7b8ab3e35.jpg?1583181391",
-      "scrapedAt": "2026-07-02T19:15:22.238413"
+      "scrapedAt": "2026-07-03T00:10:08.197954"
     },
     {
       "source": "eventpop",
@@ -64,7 +64,7 @@
       "genre": "Concert",
       "price": "",
       "image": "https://p-u.popcdn.net/event_details/covers/000/143/535/og_cover/7776c11ec1a67ac3606227982d5986b9519bf01f.jpg?1774433666",
-      "scrapedAt": "2026-07-02T19:15:23.480491"
+      "scrapedAt": "2026-07-03T00:10:10.252525"
     },
     {
       "source": "eventpop",
@@ -80,7 +80,7 @@
       "genre": "Concert",
       "price": "",
       "image": "/images/cover-placeholder.jpg",
-      "scrapedAt": "2026-07-02T19:15:24.367481"
+      "scrapedAt": "2026-07-03T00:10:11.437752"
     },
     {
       "source": "eventpop",
@@ -96,7 +96,7 @@
       "genre": "Concert",
       "price": "",
       "image": "https://p-u.popcdn.net/event_details/covers/000/143/799/og_cover/397f15a3533cb4a4710441fbd85925941c586f99.jpg?1774435041",
-      "scrapedAt": "2026-07-02T19:15:26.238433"
+      "scrapedAt": "2026-07-03T00:10:12.624779"
     },
     {
       "source": "eventpop",
@@ -112,7 +112,7 @@
       "genre": "Concert",
       "price": "",
       "image": "https://p-u.popcdn.net/event_details/covers/000/150/895/og_cover/5beb7aecfeb1ebfcfb92d008483e2ba36662287c.jpg?1778484697",
-      "scrapedAt": "2026-07-02T19:15:27.378857"
+      "scrapedAt": "2026-07-03T00:10:13.590959"
     },
     {
       "source": "eventpop",
@@ -128,7 +128,7 @@
       "genre": "Concert",
       "price": "4,000 THB",
       "image": "https://p-u.popcdn.net/event_details/covers/000/145/957/og_cover/74c7b9d1af236e431336310f1d63fd266800e2b8.jpg?1775650861",
-      "scrapedAt": "2026-07-02T19:15:28.703604"
+      "scrapedAt": "2026-07-03T00:10:15.055028"
     },
     {
       "source": "eventpop",
@@ -144,7 +144,7 @@
       "genre": "Concert",
       "price": "4,000 THB",
       "image": "https://p-u.popcdn.net/event_details/covers/000/144/494/og_cover/3bd5a2333bbc29353eb764ab32dc04086a50fc18.jpg?1775624426",
-      "scrapedAt": "2026-07-02T19:15:29.871192"
+      "scrapedAt": "2026-07-03T00:10:16.367305"
     },
     {
       "source": "eventpop",
@@ -160,7 +160,7 @@
       "genre": "Concert",
       "price": "",
       "image": "https://p-u.popcdn.net/event_details/covers/000/151/905/og_cover/04f7aac960843128c5d1e4fd58aee7850b8268a9.jpg?1779362848",
-      "scrapedAt": "2026-07-02T19:15:30.885915"
+      "scrapedAt": "2026-07-03T00:10:17.320292"
     },
     {
       "source": "eventpop",
@@ -176,7 +176,7 @@
       "genre": "Concert",
       "price": "",
       "image": "https://p-u.popcdn.net/event_details/covers/000/134/751/og_cover/6baf486ab18271d01f031bbaa5f6148b7e092f93.png?1770189288",
-      "scrapedAt": "2026-07-02T19:15:31.796848"
+      "scrapedAt": "2026-07-03T00:10:18.266251"
     },
     {
       "source": "eventpop",
@@ -192,7 +192,7 @@
       "genre": "Concert",
       "price": "",
       "image": "https://p-u.popcdn.net/event_details/covers/000/134/685/og_cover/940873d3e1a01dc7e16a32ee31fed467abf02cfe.jpg?1770179613",
-      "scrapedAt": "2026-07-02T19:15:32.696229"
+      "scrapedAt": "2026-07-03T00:10:19.202677"
     },
     {
       "source": "eventpop",
@@ -208,7 +208,7 @@
       "genre": "Concert",
       "price": "",
       "image": "https://p-u.popcdn.net/event_details/covers/000/003/620/og_cover/e74f5131ef44e2d5e384a45260344ff1892d009e.png?1584629586",
-      "scrapedAt": "2026-07-02T19:15:33.714071"
+      "scrapedAt": "2026-07-03T00:10:20.197610"
     },
     {
       "source": "eventpop",
@@ -224,7 +224,7 @@
       "genre": "Concert",
       "price": "",
       "image": "https://p-u.popcdn.net/event_details/covers/000/003/801/og_cover/43112cd3ecbb2358cccf5092f6eec3c77fbe76c0.png?1584631690",
-      "scrapedAt": "2026-07-02T19:15:34.720483"
+      "scrapedAt": "2026-07-03T00:10:21.183262"
     },
     {
       "source": "eventpop",
@@ -240,7 +240,7 @@
       "genre": "Concert",
       "price": "",
       "image": "https://p-u.popcdn.net/event_details/covers/000/007/591/og_cover/42ea2f0ec7e5c2f2e4c0273c7a91638f91da8c77.jpg?1583182756",
-      "scrapedAt": "2026-07-02T19:15:35.737357"
+      "scrapedAt": "2026-07-03T00:10:22.316842"
     },
     {
       "source": "eventpop",
@@ -256,7 +256,7 @@
       "genre": "Concert",
       "price": "",
       "image": "https://p-u.popcdn.net/event_details/covers/000/004/116/og_cover/e05180111b1741e7c641a9b5b14df9826f45c71f.jpg?1584682757",
-      "scrapedAt": "2026-07-02T19:15:36.658481"
+      "scrapedAt": "2026-07-03T00:10:23.338466"
     },
     {
       "source": "eventpop",
@@ -272,7 +272,7 @@
       "genre": "Concert",
       "price": "900 THB",
       "image": "https://p-u.popcdn.net/event_details/covers/000/004/166/og_cover/9a1977c35166dfd4779d5cb57d4a3278e220625a.jpg?1584683032",
-      "scrapedAt": "2026-07-02T19:15:37.793977"
+      "scrapedAt": "2026-07-03T00:10:24.237204"
     },
     {
       "source": "eventpop",
@@ -288,7 +288,7 @@
       "genre": "Concert",
       "price": "",
       "image": "https://p-u.popcdn.net/event_details/covers/000/003/898/og_cover/3ab7c039916842c0571323df3e53f62de8387688.png?1584632154",
-      "scrapedAt": "2026-07-02T19:15:39.630565"
+      "scrapedAt": "2026-07-03T00:10:25.241853"
     },
     {
       "source": "eventpop",
@@ -304,7 +304,7 @@
       "genre": "Concert",
       "price": "300 THB",
       "image": "https://p-u.popcdn.net/event_details/covers/000/004/275/og_cover/6b5463adc42c01f54c0cbe15e2906ea90303edc6.png?1584715254",
-      "scrapedAt": "2026-07-02T19:15:40.580106"
+      "scrapedAt": "2026-07-03T00:10:26.623329"
     },
     {
       "source": "eventpop",
@@ -320,7 +320,7 @@
       "genre": "Concert",
       "price": "",
       "image": "https://p-u.popcdn.net/event_details/covers/000/004/202/og_cover/5144364a5fb763b8a09b3e20cba6fcb6b1a7326a.jpg?1584683210",
-      "scrapedAt": "2026-07-02T19:15:41.477142"
+      "scrapedAt": "2026-07-03T00:10:27.587006"
     },
     {
       "source": "eventpop",
@@ -336,7 +336,7 @@
       "genre": "Concert",
       "price": "3,900 THB",
       "image": "https://p-u.popcdn.net/event_details/covers/000/152/836/og_cover/dcc838cd70033c25fa5dd176795a04c01d33570c.jpg?1781693503",
-      "scrapedAt": "2026-07-02T19:15:42.409646"
+      "scrapedAt": "2026-07-03T00:10:28.550702"
     },
     {
       "source": "eventpop",
@@ -352,7 +352,7 @@
       "genre": "Concert",
       "price": "2,500 THB",
       "image": "https://p-u.popcdn.net/event_details/covers/000/152/872/og_cover/77a1f0e808497ffb46789e039173ec5c14e36269.jpeg?1779788584",
-      "scrapedAt": "2026-07-02T19:15:43.350011"
+      "scrapedAt": "2026-07-03T00:10:30.511217"
     },
     {
       "source": "eventpop",
@@ -368,7 +368,7 @@
       "genre": "Concert",
       "price": "300 THB",
       "image": "https://p-u.popcdn.net/event_details/covers/000/154/264/og_cover/406f8166073ceb40bbfc6b62c022664b8eae7226.png?1780565409",
-      "scrapedAt": "2026-07-02T19:15:44.270449"
+      "scrapedAt": "2026-07-03T00:10:31.452300"
     },
     {
       "source": "eventpop",
@@ -384,7 +384,7 @@
       "genre": "Concert",
       "price": "2,500 THB",
       "image": "https://p-u.popcdn.net/event_details/covers/000/153/802/og_cover/15b304e153d844ede36f1772edcf6dc9811d95c4.jpg?1780387762",
-      "scrapedAt": "2026-07-02T19:15:45.411331"
+      "scrapedAt": "2026-07-03T00:10:32.450549"
     },
     {
       "source": "eventpop",
@@ -400,7 +400,7 @@
       "genre": "Concert",
       "price": "",
       "image": "/images/cover-placeholder.jpg",
-      "scrapedAt": "2026-07-02T19:15:46.324490"
+      "scrapedAt": "2026-07-03T00:10:33.414124"
     },
     {
       "source": "eventpop",
@@ -416,7 +416,7 @@
       "genre": "Concert",
       "price": "",
       "image": "/images/cover-placeholder.jpg",
-      "scrapedAt": "2026-07-02T19:15:47.225749"
+      "scrapedAt": "2026-07-03T00:10:34.354234"
     },
     {
       "source": "eventpop",
@@ -432,7 +432,7 @@
       "genre": "Concert",
       "price": "4,000 THB",
       "image": "https://p-u.popcdn.net/event_details/covers/000/144/494/og_cover/3bd5a2333bbc29353eb764ab32dc04086a50fc18.jpg?1775624426",
-      "scrapedAt": "2026-07-02T19:15:48.534041"
+      "scrapedAt": "2026-07-03T00:10:35.519105"
     },
     {
       "source": "eventpop",
@@ -448,7 +448,7 @@
       "genre": "Concert",
       "price": "",
       "image": "https://p-u.popcdn.net/event_details/covers/000/155/261/og_cover/5e5be6c0369be3d6bdf51aa9f7c7408b06394bed.png?1781073993",
-      "scrapedAt": "2026-07-02T19:15:50.490901"
+      "scrapedAt": "2026-07-03T00:10:36.439242"
     },
     {
       "source": "eventpop",
@@ -464,7 +464,7 @@
       "genre": "Concert",
       "price": "",
       "image": "https://p-u.popcdn.net/event_details/covers/000/155/727/og_cover/cb7fa932ac3a822b4b0c2876e736f903495c4a36.jpg?1781252735",
-      "scrapedAt": "2026-07-02T19:15:51.417968"
+      "scrapedAt": "2026-07-03T00:10:37.342282"
     },
     {
       "source": "eventpop",
@@ -480,183 +480,7 @@
       "genre": "Concert",
       "price": "10,000 THB",
       "image": "https://p-u.popcdn.net/event_details/covers/000/155/826/og_cover/301ae099221fdea22a380aaba28da88f4ab5fdaa.png?1781256827",
-      "scrapedAt": "2026-07-02T19:15:53.205985"
-    },
-    {
-      "source": "eventpop",
-      "sourceId": "157466",
-      "title": "MONTHLY NØTWORKING JULY | Bangkok Startup Networking Event at One Bangkok",
-      "artist": "MONTHLY NØTWORKING JULY | Bangkok Startup Networking Event at One Bangkok",
-      "date": "2026-07-16",
-      "dateText": "2026-07-16T18:00:00+07:00",
-      "venue": "One Bangkok, Bangkok, Thailand",
-      "link": "https://www.eventpop.me/e/157466/notworkingjuly",
-      "linkLabel": "Eventpop",
-      "isInternational": true,
-      "genre": "Concert",
-      "price": "350 THB",
-      "image": "https://p-u.popcdn.net/event_details/covers/000/157/466/og_cover/653f1c21d09c66af315a762db1ca5031400a1adb.png?1782125985",
-      "scrapedAt": "2026-07-02T19:16:01.678939"
-    },
-    {
-      "source": "eventpop",
-      "sourceId": "157898",
-      "title": "RUDE MELANCHOLIC",
-      "artist": "RUDE MELANCHOLIC",
-      "date": "2026-07-24",
-      "dateText": "2026-07-24T18:00:00+07:00",
-      "venue": "Bangkok Island, กรุงเทพมหานคร, ประเทศไทย",
-      "link": "https://www.eventpop.me/e/157898",
-      "linkLabel": "Eventpop",
-      "isInternational": true,
-      "genre": "Concert",
-      "price": "300 THB",
-      "image": "https://p-u.popcdn.net/event_details/covers/000/157/898/og_cover/04e55230c573a09126b13541c4ec6afd41c48c7e.jpeg?1782211002",
-      "scrapedAt": "2026-07-02T19:16:03.651899"
-    },
-    {
-      "source": "eventpop",
-      "sourceId": "158229",
-      "title": "BSA X ClickHouse BUILD Workshop",
-      "artist": "BSA X ClickHouse BUILD Workshop",
-      "date": "2026-07-21",
-      "dateText": "2026-07-21T14:00:00+07:00",
-      "venue": "The Great Room Gaysorn Tower | Coworking, Hot Desk \\u0026 Meeting Spaces, Bangkok, Thailand",
-      "link": "https://www.eventpop.me/e/158229/clickhouse-build-workshop",
-      "linkLabel": "Eventpop",
-      "isInternational": true,
-      "genre": "Concert",
-      "price": "",
-      "image": "/images/cover-placeholder.jpg",
-      "scrapedAt": "2026-07-02T19:16:05.761666"
-    },
-    {
-      "source": "eventpop",
-      "sourceId": "1072",
-      "title": "100Plus Presents 100 km. Bangkok Ride Overnight 2016",
-      "artist": "100Plus Presents 100 km. Bangkok Ride Overnight 2016",
-      "date": "2017-01-28",
-      "dateText": "2017-01-28T18:30:00+07:00",
-      "venue": "",
-      "link": "https://www.eventpop.me/e/1072/bangkok-ride-overnight",
-      "linkLabel": "Eventpop",
-      "isInternational": true,
-      "genre": "Concert",
-      "price": "",
-      "image": "https://p-u.popcdn.net/event_details/covers/000/001/072/og_cover/6599995efe907d95315c8fd9d5f7743881262147.jpg?1583912335",
-      "scrapedAt": "2026-07-02T19:16:07.752858"
-    },
-    {
-      "source": "eventpop",
-      "sourceId": "2217",
-      "title": "Bangkok UX Meetup",
-      "artist": "Bangkok UX Meetup",
-      "date": "2017-08-22",
-      "dateText": "2017-08-22T18:00:00+07:00",
-      "venue": "",
-      "link": "https://www.eventpop.me/e/2217/bangkok-ux-meetup-9",
-      "linkLabel": "Eventpop",
-      "isInternational": true,
-      "genre": "Concert",
-      "price": "",
-      "image": "https://p-u.popcdn.net/event_details/covers/000/002/217/og_cover/b7ad4c820b664c865b94e3d9fd95e3f590463d0a.png?1584338491",
-      "scrapedAt": "2026-07-02T19:16:09.760639"
-    },
-    {
-      "source": "eventpop",
-      "sourceId": "2953",
-      "title": "wisepass official launch Bangkok",
-      "artist": "wisepass official launch Bangkok",
-      "date": "2018-03-15",
-      "dateText": "2018-03-15T19:00:00+07:00",
-      "venue": "",
-      "link": "https://www.eventpop.me/e/2953/wisepass-official-launch",
-      "linkLabel": "Eventpop",
-      "isInternational": true,
-      "genre": "Concert",
-      "price": "",
-      "image": "https://p-u.popcdn.net/event_details/covers/000/002/953/og_cover/74ab8d6cdbc9db3814a150484c3451d8b724b4c0.png?1584434194",
-      "scrapedAt": "2026-07-02T19:16:11.763598"
-    },
-    {
-      "source": "eventpop",
-      "sourceId": "158465",
-      "title": "Anatomy of Fun เปลี่ยนเรื่องยากให้กลายเป็นความสนุก",
-      "artist": "Anatomy of Fun เปลี่ยนเรื่องยากให้กลายเป็นความสนุก",
-      "date": "2026-07-12",
-      "dateText": "2026-07-12T10:00:00+07:00",
-      "venue": "Eattentionplease, Bangkok, Thailand",
-      "link": "https://www.eventpop.me/e/158465/anatomy-of-fun-talk",
-      "linkLabel": "Eventpop",
-      "isInternational": false,
-      "genre": "Concert",
-      "price": "",
-      "image": "https://p-u.popcdn.net/event_details/covers/000/158/465/og_cover/84ebc1a3c5bbce16d51da7fc0db3b445f24f44c6.png?1782896247",
-      "scrapedAt": "2026-07-02T19:16:13.756597"
-    },
-    {
-      "source": "eventpop",
-      "sourceId": "158961",
-      "title": "AMERICAN COOKOUT - 4th of July",
-      "artist": "AMERICAN COOKOUT",
-      "date": "2026-07-04",
-      "dateText": "2026-07-04T18:00:00+07:00",
-      "venue": "Bangkok Island, กรุงเทพมหานคร, ประเทศไทย",
-      "link": "https://www.eventpop.me/e/158961",
-      "linkLabel": "Eventpop",
-      "isInternational": true,
-      "genre": "Concert",
-      "price": "",
-      "image": "/images/cover-placeholder.jpg",
-      "scrapedAt": "2026-07-02T19:16:15.767684"
-    },
-    {
-      "source": "eventpop",
-      "sourceId": "159593",
-      "title": "𝗡𝗘𝗢𝗡 𝗗𝗥𝗘𝗔𝗠𝗦 & 𝗣𝗔𝗣𝗘𝗥 𝗦𝗔𝗜𝗡𝗧𝗦",
-      "artist": "𝗡𝗘𝗢𝗡 𝗗𝗥𝗘𝗔𝗠𝗦 & 𝗣𝗔𝗣𝗘𝗥 𝗦𝗔𝗜𝗡𝗧𝗦",
-      "date": "2026-07-04",
-      "dateText": "2026-07-04T09:00:00+07:00",
-      "venue": "Siam Paragon, Bangkok, Thailand",
-      "link": "https://www.eventpop.me/e/159593",
-      "linkLabel": "Eventpop",
-      "isInternational": false,
-      "genre": "Concert",
-      "price": "",
-      "image": "/images/cover-placeholder.jpg",
-      "scrapedAt": "2026-07-02T19:16:17.721816"
-    },
-    {
-      "source": "eventpop",
-      "sourceId": "134685",
-      "title": "Thai Fight League at World Siam Stadium in Bangkok",
-      "artist": "Thai Fight League at World Siam Stadium in Bangkok",
-      "date": "2026-07-05",
-      "dateText": "2026-07-05T18:00:00+07:00",
-      "venue": "World Siam Stadium, กรุงเทพมหานคร, ประเทศไทย",
-      "link": "https://www.eventpop.me/e/134685/thai-fight-league",
-      "linkLabel": "Eventpop",
-      "isInternational": true,
-      "genre": "Concert",
-      "price": "",
-      "image": "https://p-u.popcdn.net/event_details/covers/000/134/685/og_cover/940873d3e1a01dc7e16a32ee31fed467abf02cfe.jpg?1770179613",
-      "scrapedAt": "2026-07-02T19:16:19.686742"
-    },
-    {
-      "source": "eventpop",
-      "sourceId": "3397",
-      "title": "Cheese@SO | Best Cheese Night in Bangkok | SO Sofitel Bangkok",
-      "artist": "Cheese@SO | Best Cheese Night in Bangkok | SO Sofitel Bangkok",
-      "date": "2018-06-01",
-      "dateText": "2018-06-01T19:00:00+07:00",
-      "venue": "",
-      "link": "https://www.eventpop.me/e/3397/cheeseatso-june2018",
-      "linkLabel": "Eventpop",
-      "isInternational": true,
-      "genre": "Concert",
-      "price": "",
-      "image": "https://p-u.popcdn.net/event_details/covers/000/003/397/og_cover/82758838efc1d7b0e39153d051d9450f5e218611.jpg?1584552203",
-      "scrapedAt": "2026-07-02T19:16:21.915965"
+      "scrapedAt": "2026-07-03T00:10:38.882887"
     }
   ]
 }
