@@ -1,5 +1,5 @@
 {
-  "runAt": "2026-07-04T00:10:09.296551",
+  "runAt": "2026-07-04T05:42:59.496736",
   "sources": {
     "scripts/scrape_lnt.py": {
       "status": "error",
@@ -7,15 +7,15 @@
     },
     "scripts/scrape_ttm.py": {
       "status": "ok",
-      "events": 62
+      "events": 61
     },
     "scripts/scrape_ticketmelon.py": {
       "status": "ok",
-      "events": 380
+      "events": 381
     },
     "scripts/scrape_eventpop.py": {
       "status": "ok",
-      "events": 39
+      "events": 44
     },
     "scripts/scrape_allevents.py": {
       "status": "ok",
